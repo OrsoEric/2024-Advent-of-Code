@@ -39,6 +39,39 @@ Your actual left and right lists contain many location IDs. What is the total di
 To begin, get your puzzle input.
 """
 
+
+"""
+rt Two ---
+Your analysis only confirmed what everyone feared: the two lists of location IDs are indeed very different.
+
+Or are they?
+
+The Historians can't agree on which group made the mistakes or how to read most of the Chief's handwriting, but in the commotion you notice an interesting detail: a lot of location IDs appear in both lists! Maybe the other numbers aren't location IDs at all but rather misinterpreted handwriting.
+
+This time, you'll need to figure out exactly how often each number from the left list appears in the right list.
+Calculate a total similarity score by adding up each number in the left list after multiplying it by the number of times that number appears in the right list.
+
+Here are the same example lists again:
+
+3   4
+4   3
+2   5
+1   3
+3   9
+3   3
+For these example lists, here is the process of finding the similarity score:
+
+The first number in the left list is 3. It appears in the right list three times, so the similarity score increases by 3 * 3 = 9.
+The second number in the left list is 4. It appears in the right list once, so the similarity score increases by 4 * 1 = 4.
+The third number in the left list is 2. It does not appear in the right list, so the similarity score does not increase (2 * 0 = 0).
+The fourth number, 1, also does not appear in the right list.
+The fifth number, 3, appears in the right list three times; the similarity score increases by 9.
+The last number, 3, appears in the right list three times; the similarity score again increases by 9.
+So, for these example lists, the similarity score at the end of this process is 31 (9 + 4 + 0 + 0 + 9 + 9).
+
+Once again consider your left and right lists. What is their similarity score?
+"""
+
 print("Day 1")
 
 from typing import Tuple, List
@@ -72,6 +105,33 @@ def save_list_to_file(iln_data: List[int], is_filename: str) -> None:
         for n_value in iln_data:
             file.write(f"{n_value}\n")
 
+
+def compute_frequency( iln_values: List[int] ) -> dict:
+    
+    d_frequency = dict()
+    for n_value in iln_values:
+        if n_value in d_frequency:
+            d_frequency[n_value] += 1
+        else:
+            d_frequency[n_value] = 1
+    return d_frequency
+
+def compute_similarity_score( iln_left: List[int], iln_right: List[int]) -> int:
+    """
+    for each number on the right list, i multiply it by the times it appear on the right list
+    """
+    d_left = compute_frequency(iln_left)
+    d_right = compute_frequency(iln_right)
+    print(f"frequency left {d_left} | {d_right}")
+    n_similarity = 0
+    for n_value in d_left:
+        if (n_value in d_right):
+            n_sum = n_value *d_left[n_value] *d_right[n_value]
+            #print(f"{n_sum}")
+            n_similarity += n_sum
+            
+    return n_similarity
+
 def day_1( is_filename: str ) -> int:
     """
     :param filename: The name of the file containing the location IDs.
@@ -100,6 +160,10 @@ def day_1( is_filename: str ) -> int:
     save_list_to_file( ln_result, gs_filename_result )
 
     print(f"Result list: {ln_result} Result: {n_result}")
+
+    n_similarity = compute_similarity_score( ln_left, ln_right )
+
+    print(f"similarity score: {n_similarity}")
     return n_result
 
 #--------------------------------------------------------------------------------------------------------------------------------
