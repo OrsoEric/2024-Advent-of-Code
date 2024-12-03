@@ -37,6 +37,19 @@ Analyze the unusual data from the engineers. How many reports are safe?
 """
 
 """
+The engineers are surprised by the low number of safe reports until they realize they forgot to tell you about the Problem Dampener.
+
+The Problem Dampener is a reactor-mounted module that lets the reactor safety systems tolerate a single bad level in what would otherwise be a safe report. It's like the bad level never happened!
+
+Now, the same rules apply as before, except if removing a single level from an unsafe report would make it safe, the report instead counts as safe.
+
+More of the above example's reports are now safe:
+"""
+
+
+
+
+"""
 Algorithm
 -rows are reports, col/elements are levels
 -Open a file, and get a list of levels
@@ -45,6 +58,9 @@ Algorithm
 -safety rule
     -unsafe if delta level/next level changes sign
     -unsafe if delta exceed 4
+    -unsafe if delta is exactly zero
+-grace exceedance
+    -try to remove one level and rerun?
 """
 
 from typing import Tuple, List
@@ -80,7 +96,9 @@ def is_report_unsafe( iln_levels : List[int] ) -> bool:
         #memory
         n_old = n_value
 
-    print(f"Levels: {iln_levels} Overflow: {n_cnt_overflow} Sign: +{n_cnt_positive} | -{n_cnt_negative} Stationary: {n_cnt_zero}")
+    #count number of exceedances, if exceedances are exactly 1, it's safe
+    n_cnt_violations = n_cnt_overflow + min(abs(n_cnt_positive),abs(n_cnt_negative)) +n_cnt_zero
+    print(f"Levels: {iln_levels} Violations: {n_cnt_violations} | Overflow: {n_cnt_overflow} Sign: +{n_cnt_positive} | -{n_cnt_negative} Stationary: {n_cnt_zero}")
 
     #it's unsafe because of overflow rule
     if (n_cnt_overflow > 0):
@@ -99,10 +117,26 @@ def is_report_unsafe( iln_levels : List[int] ) -> bool:
     #it's safe
     return False
 
+import copy # Original list with nested elements original_list = [1, 2, [3, 4], 5] # Create a deep copy of the list copied_list = 
+
+def remove_one_level( iln_levels : List[int] ) -> bool:
+    #scan the report for all levels
+    for n_index,n_value in enumerate(iln_levels):
+        #create a deep copy
+        ln_levels_copy = copy.deepcopy(iln_levels)
+        #remove this level
+        del ln_levels_copy[n_index]
+        #rerun the unsafe detection on this list
+        b_result = is_report_unsafe( ln_levels_copy )
+        if (b_result == False):
+            print(f"Report made safe by removing element: {n_value} index: {n_index}")
+            return False
+
 def day_2( is_filename: str ):
     n_cnt_report = 0
     n_cnt_safe = 0
     n_cnt_unsafe = 0
+    n_cnt_safe_removing_level = 0
     with open(is_filename, 'r') as c_file:
         #scan the file and get a line string
         for s_line in c_file:
@@ -115,14 +149,19 @@ def day_2( is_filename: str ):
             #create a list of int levels from that list of strings
             for s_level in ls_level:
                 ln_level.append(int(s_level))
-            #print(f"Levels: {ln_level}")
             b_result = is_report_unsafe(ln_level)
             if (b_result == False):
                 n_cnt_safe += 1
             else:
-                n_cnt_unsafe += 1
-
-    print(f"Total reports: {n_cnt_report} | Safe reports: {n_cnt_safe} | Unsafe reports: {n_cnt_unsafe}")
+                #if unsafe, I can try to remove a level
+                b_result = remove_one_level( ln_level )
+                #b_result, n_index_first_violation = is_report_unsafe(ln_level)
+                if (b_result == False):
+                    n_cnt_safe_removing_level += 1
+                else:
+                    n_cnt_unsafe += 1
+            
+    print(f"Total reports: {n_cnt_report} | Safe reports: {n_cnt_safe} | Safe after removing one unsafe level: {n_cnt_safe_removing_level} Total: {n_cnt_safe+n_cnt_safe_removing_level} | Unsafe reports: {n_cnt_unsafe}")
 
 
 #--------------------------------------------------------------------------------------------------------------------------------
