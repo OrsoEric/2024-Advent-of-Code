@@ -1,17 +1,12 @@
-# python-project-template
+# B-AROL-O/aoc-2024
 
-Project template suitable for Python development.
+This repository contains the solutions to [Advent of Code 2024](https://adventofcode.com/2024) developed by some [B-AROL-O Team](https://github.com/B-AROL-O) members.
 
-This template provides a basic [Development Container](https://containers.dev/) with the following components:
+Repository created from [python-project-template](https://github.com/arol-polito/python-project-template).
 
-- [Ubuntu 24.04](https://ubuntu.com/)
-- [Python 3.12](https://www.python.org/)
-- [Poetry](https://python-poetry.org/)
-- [Visual Studio Code](https://code.visualstudio.com/) extensions: [Python](https://marketplace.visualstudio.com/items?itemName=ms-python.python), [Git Graph](https://marketplace.visualstudio.com/items?itemName=mhutchie.git-graph)
+## Copyright and license
 
-## Copyright and license for "python-project-template"
-
-Copyright (C) 2024, [Gianpaolo Macario](https://github.com/gmacario), all rights reserved.
+Copyright (C) 2024, [B-AROL-O Team](https://github.com/B-AROL-O), all rights reserved.
 
 ### Source code license
 
