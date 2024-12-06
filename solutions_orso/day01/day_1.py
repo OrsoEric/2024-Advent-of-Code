@@ -171,9 +171,9 @@ def day_1( is_filename: str ) -> int:
 #--------------------------------------------------------------------------------------------------------------------------------
 
 # Example usage
-gs_filename_example = 'advent_of_code\day_1_example.csv'
-gs_filename = 'advent_of_code\day_1.csv'
-gs_filename_result = 'advent_of_code\day_1_result.csv'
+gs_filename_example = 'day01\day_1_example.csv'
+gs_filename = 'day01\day_1.csv'
+gs_filename_result = 'day01\day_1_result.csv'
 #   if interpreter has the intent of executing this file
 if __name__ == "__main__":
     day_1( gs_filename_example )
