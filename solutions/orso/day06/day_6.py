@@ -100,11 +100,129 @@ In this example, the guard will visit 41 distinct positions on your map.
 Predict the path of the guard. How many distinct positions will the guard visit before leaving the mapped area?
 """
 
+"""
+--- Part Two ---
+
+While The Historians begin working around the guard's patrol route, you borrow their fancy device and step outside the lab.
+From the safety of a supply closet, you time travel through the last few months and record the nightly status of the lab's guard post on the walls of the closet.
+
+Returning after what seems like only a few seconds to The Historians,
+they explain that the guard's patrol area is simply too large for them to safely searchthe lab without getting caught.
+
+Fortunately, they are pretty sure that adding a single new obstruction won't cause a time paradox.
+They'd like to place the new obstruction in such a way that the guard will get stuck in a loop, making the rest of the lab safe to search.
+
+To have the lowest chance of creating a time paradox, The Historians would like to know all of the possible positions for such an obstruction.
+The new obstruction can't be placed at the guard's starting position - the guard is there right now and would notice.
+
+In the above example, there are only 6 different positions where a new obstruction would cause the guard to get stuck in a loop.
+The diagrams of these six situations use O to mark the new obstruction, | to show a position where the guard moves up/down,
+- to show a position where the guard moves left/right, and + to show a position where the guard moves both up/down and left/right.
+
+Option one, put a printing press next to the guard's starting position:
+
+....#.....
+....+---+#
+....|...|.
+..#.|...|.
+....|..#|.
+....|...|.
+.#.O^---+.
+........#.
+#.........
+......#...
+
+Option two, put a stack of failed suit prototypes in the bottom right quadrant of the mapped area:
+
+....#.....
+....+---+#
+....|...|.
+..#.|...|.
+..+-+-+#|.
+..|.|.|.|.
+.#+-^-+-+.
+......O.#.
+#.........
+......#...
+
+Option three, put a crate of chimney-squeeze prototype fabric next to the standing desk in the bottom right quadrant:
+
+....#.....
+....+---+#
+....|...|.
+..#.|...|.
+..+-+-+#|.
+..|.|.|.|.
+.#+-^-+-+.
+.+----+O#.
+#+----+...
+......#...
+
+Option four, put an alchemical retroencabulator near the bottom left corner:
+
+....#.....
+....+---+#
+....|...|.
+..#.|...|.
+..+-+-+#|.
+..|.|.|.|.
+.#+-^-+-+.
+..|...|.#.
+#O+---+...
+......#...
+
+Option five, put the alchemical retroencabulator a bit to the right instead:
+
+....#.....
+....+---+#
+....|...|.
+..#.|...|.
+..+-+-+#|.
+..|.|.|.|.
+.#+-^-+-+.
+....|.|.#.
+#..O+-+...
+......#...
+
+Option six, put a tank of sovereign glue right next to the tank of universal solvent:
+
+....#.....
+....+---+#
+....|...|.
+..#.|...|.
+..+-+-+#|.
+..|.|.|.|.
+.#+-^-+-+.
+.+----++#.
+#+----++..
+......#O..
+
+It doesn't really matter what you choose to use as an obstacle so long as you and The Historians can put it into position without the guard noticing.
+The important thing is having enough options that you can find one that minimizes time paradoxes, and in this example, there are 6 different positions you could choose.
+
+You need to get the guard stuck in a loop by adding a single new obstruction. How many different positions could you choose for this obstruction?
+"""
+
+"""
+PART 2 ALGORITHM
+Loop detection:
+-during the simulation I load up the coordinate dictionary, along with direction
+-if I detect the same coordinate AND direction I passed through, that's a loop
+New Obstacle
+-the new obstacle can only be placed in front of the guard where they pass.
+-each step of the simulation
+    -if there isn't an obstacle in front of the guard
+    -i place an obstacle in front of the guard
+    -launch a simulation and detect loop
+    -if loop is detected, add this new obstacle to the coordinate list of obstacles that cause loops
+"""
 
 
 import logging
 
 import itertools
+
+import copy
 
 from typing import Dict, Tuple, List
 
@@ -112,7 +230,7 @@ class Patrol_route:
     class Coordinate:
         n_x, n_y, s_dir = -1, -1, "?"
         def show_position(self) -> None:
-            logging.info(f"X: {self.n_x} Y: {self.n_y} Direction: {self.s_dir}")
+            logging.debug(f"X: {self.n_x} Y: {self.n_y} Direction: {self.s_dir}")
         def get_xy(self) -> Tuple[int,int]:
             return (self.n_x, self.n_y)
         def get_xyd(self) -> Tuple[int,int,str]:
@@ -127,8 +245,11 @@ class Patrol_route:
         self.gn_width = -1
         self.gn_height = -1
         self.gd_obstacle = dict()
+        #current position of the guard
         self.gst_guard_position = self.Coordinate()
+        #list of the path followed by the guard
         self.gltn_patrol_path = list()
+        self.gst_guard_position_backup = self.Coordinate()
 
     def load_map_from_file(self, is_filename: str) -> bool:
         """
@@ -154,10 +275,16 @@ class Patrol_route:
                             self.gst_guard_position.n_x = x
                             self.gst_guard_position.n_y = y
                             self.gst_guard_position.s_dir = char
+                            self.gst_guard_position_backup.n_x = x
+                            self.gst_guard_position_backup.n_y = y
+                            self.gst_guard_position_backup.s_dir = char
         except Exception as e:
             logging.error(f"Failed to load map: {e}")
             return True #fail
         self.show_map(gs_filename_output)
+
+    def restore_guard_position(self) -> None:
+        self.gst_guard_position = copy.deepcopy(self.gst_guard_position_backup)
 
     def show_map(self, output_filename: str) -> None:
         """
@@ -199,7 +326,7 @@ class Patrol_route:
             return True #OOB
         return False
 
-    def compute_position_in_front_of_the_guard( self ) -> Coordinate:
+    def compute_position_in_front_of_the_guard( self, ist_coordinate: Coordinate ) -> Coordinate:
         """
         Given a guard position XY and a guard direction ^>v<
         Compute the position in front of the guard, and what the right turn is
@@ -208,27 +335,27 @@ class Patrol_route:
         st_coordinate = self.Coordinate()
 
         #UP
-        if (self.gst_guard_position.s_dir == "^"):
-            st_coordinate.n_x = self.gst_guard_position.n_x
-            st_coordinate.n_y = self.gst_guard_position.n_y -1
+        if (ist_coordinate.s_dir == "^"):
+            st_coordinate.n_x = ist_coordinate.n_x
+            st_coordinate.n_y = ist_coordinate.n_y -1
             st_coordinate.s_dir = ">"
         #RIGHT
-        elif (self.gst_guard_position.s_dir == ">"):
-            st_coordinate.n_x = self.gst_guard_position.n_x +1
-            st_coordinate.n_y = self.gst_guard_position.n_y
+        elif (ist_coordinate.s_dir == ">"):
+            st_coordinate.n_x = ist_coordinate.n_x +1
+            st_coordinate.n_y = ist_coordinate.n_y
             st_coordinate.s_dir = "v"
         #DOWN
-        elif (self.gst_guard_position.s_dir == "v"):
-            st_coordinate.n_x = self.gst_guard_position.n_x
-            st_coordinate.n_y = self.gst_guard_position.n_y +1
+        elif (ist_coordinate.s_dir == "v"):
+            st_coordinate.n_x = ist_coordinate.n_x
+            st_coordinate.n_y = ist_coordinate.n_y +1
             st_coordinate.s_dir = "<"
         #LEFT
-        elif (self.gst_guard_position.s_dir == "<"):
-            st_coordinate.n_x = self.gst_guard_position.n_x -1
-            st_coordinate.n_y = self.gst_guard_position.n_y
+        elif (ist_coordinate.s_dir == "<"):
+            st_coordinate.n_x = ist_coordinate.n_x -1
+            st_coordinate.n_y = ist_coordinate.n_y
             st_coordinate.s_dir = "^"
         else:
-            logging.error("ERROR: Invalid guard direction: {self.gst_guard_position.s_dir}")
+            logging.error("ERROR: Invalid guard direction: {self.ist_coordinate.s_dir}")
         st_coordinate.show_position()
         return st_coordinate
 
@@ -239,14 +366,18 @@ class Patrol_route:
         -directions are ^>v<
         -guard advance 1 in the direction if there are no obstacles
         -guard turn 90° to the right if there are obstacles
+        return True means an infinite loop has been detected
         """
-        
+        self.restore_guard_position()
+
+        logging.info(f"START SIMULATION Guard: {self.gst_guard_position.get_xyd()}")
         lst_path = [self.gst_guard_position.get_xyd()]
 
         b_continue = True
         while b_continue:
             #where is the guard looking?
-            st_coordinate = self.compute_position_in_front_of_the_guard()
+            st_coordinate = self.compute_position_in_front_of_the_guard(self.gst_guard_position)
+            #loop detection
             #is the position OOB?
             if self.is_oob(st_coordinate):
                 logging.debug("guard is OOB")
@@ -263,6 +394,12 @@ class Patrol_route:
                 #the gurad moves forward
                 self.gst_guard_position.n_x = st_coordinate.n_x
                 self.gst_guard_position.n_y = st_coordinate.n_y
+
+            if (b_continue == True) and (self.gst_guard_position.get_xyd() in lst_path):
+                lst_path.append(self.gst_guard_position.get_xyd())
+                logging.info(f"LOOP DETECTED: {len(lst_path)} | Path: {lst_path}")
+                return True #loop detected
+            
             lst_path.append(self.gst_guard_position.get_xyd())
 
         logging.info(f"Path length: {len(lst_path)} | Path: {lst_path}")
@@ -293,6 +430,43 @@ class Patrol_route:
 
         return False #OK
 
+    def simulate_loop(self)->bool:
+        """
+        I have a list of all the cells that the guard WOULD visit
+        For each cell, I place a temp obstacle on that cell, and rerun the simulation, detecting loops
+        """
+        self.restore_guard_position()
+        ltnn_temp_obstacles_that_cause_loop = list()
+        #make a copy of the path without extra obstacles
+        ltnns_path = copy.deepcopy(self.gltn_patrol_path)
+        #for all positions except the starting position along the natural path
+        for tnns_temp_obstacle in ltnns_path[1:]:
+            st = self.Coordinate()
+            st.n_x, st.n_y, st.s_dir = tnns_temp_obstacle[0], tnns_temp_obstacle[1], tnns_temp_obstacle[2]
+            #compute the position in front of the guard
+            tnns_front = self.compute_position_in_front_of_the_guard( st )
+            #add this position as an obstacle in the obstacle dictionary if not there
+            if tnns_front.get_xy() not in self.gd_obstacle:
+                self.gd_obstacle[tnns_front.get_xy()] = False
+            logging.debug(f"Added Obstacle: {tnns_front.get_xy()} | Obstacle size: {len(self.gd_obstacle)}")
+            #launch the simulation
+            b_loop = self.simulate()
+            if b_loop:
+                #detect duplicate loop
+                if tnns_front.get_xy() not in ltnn_temp_obstacles_that_cause_loop:
+                    ltnn_temp_obstacles_that_cause_loop.append(tnns_front.get_xy())
+                    self.show_map(f"day06\day_6_output_loop{len(ltnn_temp_obstacles_that_cause_loop)}.txt")
+                    print("LOOP DETECTED")
+            #remove the obstacle from the dictionary if it's a temp obstacle
+            if self.gd_obstacle[tnns_front.get_xy()] == False:
+                del self.gd_obstacle[tnns_front.get_xy()]
+        
+
+
+        logging.info(f"Temp Obstacle that cause loops: {len(ltnn_temp_obstacles_that_cause_loop)}")
+        logging.info(f"Temp Obstacle that cause loops: {ltnn_temp_obstacles_that_cause_loop}")
+        print(f"Loops: {len(ltnn_temp_obstacles_that_cause_loop)}")
+        return False #OK
 
 
 #--------------------------------------------------------------------------------------------------------------------------------
@@ -302,13 +476,14 @@ class Patrol_route:
 # Example usage
 gs_filename_output = 'day06\day_6_map_output.txt'
 gs_filename_example = 'day06\day_6_map_example.txt'
+gs_filename_example_loop = 'day06\day_6_map_example_loop.txt'
 gs_filename = 'day06\day_6_map.txt'
 #   if interpreter has the intent of executing this file
 if __name__ == "__main__":
     logging.basicConfig(
         filename='day06\day_6.log',
         # Specify the log file name
-        level=logging.DEBUG,
+        level=logging.INFO,
         # Set the level of debug to show
         format='[%(asctime)s] %(levelname)s %(module)s:%(lineno)d > %(message)s ',
         filemode='w'
@@ -318,11 +493,16 @@ if __name__ == "__main__":
     cl_patrol = Patrol_route()
     #cl_patrol.load_map_from_file(gs_filename_example)
     cl_patrol.load_map_from_file(gs_filename)
+    #successfully detect loop
+    #cl_patrol.load_map_from_file(gs_filename_example_loop)
     cl_patrol.simulate()
     cl_patrol.count_unique_cell_visited()
     #works for example
     #[2024-12-07 14:15:46,472] INFO day_6:292 > Unique Cells: 41 | Cells: {(4, 6): [0, 21], (4, 5): [1], (4, 4): [2, 29], (4, 3): [3], (4, 2): [4], (4, 1): [5, 6], (5, 1): [7], (6, 1): [8], (7, 1): [9], (8, 1): [10, 11], (8, 2): [12], (8, 3): [13], (8, 4): [14], (8, 5): [15], (8, 6): [16, 17], (7, 6): [18], (6, 6): [19, 34], (5, 6): [20], (3, 6): [22], (2, 6): [23, 24], (2, 5): [25], (2, 4): [26, 27], (3, 4): [28], (5, 4): [30], (6, 4): [31, 32], (6, 5): [33], (6, 7): [35, 50], (6, 8): [36, 37], (5, 8): [38], (4, 8): [39], (3, 8): [40], (2, 8): [41], (1, 8): [42, 43], (1, 7): [44, 45], (2, 7): [46], (3, 7): [47], (4, 7): [48], (5, 7): [49], (7, 7): [51, 52], (7, 8): [53], (7, 9): [54, 55]} 
     #SUCCESS PART 1
     #Unique Cells: 4656
+    #try to add temp obstacles and see if those cause a loop
+    cl_patrol.simulate_loop()
+
 
 
