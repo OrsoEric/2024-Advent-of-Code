@@ -140,6 +140,18 @@ class Operator_finder:
                     b_continue = False  #solution not found           
             return True #FAIL  
 
+        def get_equation_string(self)->str:
+            """
+            generate a string of the equation: "5=3+2"
+            """
+            if len(self.s_operators) <= 0:
+                return str()
+            s_result = f"{self.n_result}={self.ln_arguments[0]}"
+            for n_index, s_operator in enumerate(self.s_operators):
+                s_result += f" {s_operator} {self.ln_arguments[n_index+1]}"
+            logging.debug(f"{s_result}")
+            return s_result
+
     def __init__(self):
         """
         Initialize the Patrol_route class
@@ -175,7 +187,17 @@ class Operator_finder:
             else:
                 logging.debug(f"NOT SOLVABLE:")
         return n_accumulator_result
-
+    
+    def save_results( self, s_filename : str ) -> bool:
+        try:
+            with open(s_filename, 'w') as file:
+                for st_equation in self.glst_equation:
+                    s_equation = st_equation.get_equation_string()
+                    print(s_equation)
+                    if (len(s_equation) > 0):
+                        file.write(s_equation + '\n')
+        except Exception as e:
+            logging.error(f"Save Failed: {e}")
 #--------------------------------------------------------------------------------------------------------------------------------
 #   MAIN
 #--------------------------------------------------------------------------------------------------------------------------------
@@ -201,4 +223,5 @@ if __name__ == "__main__":
     cl_operator_finder.load_equations(gs_filename_data)
     cl_operator_finder.show()
     n_accumulator_result = cl_operator_finder.solve()
+    cl_operator_finder.save_results('day07\day_7_output_part_1.txt')
     print(f"accumulator: {n_accumulator_result}")
