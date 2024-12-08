@@ -29,6 +29,13 @@ If multiple symbols generate a focus in the same place, that count multiple time
 NO! multiple focus in the same place count as 1
 """
 
+"""
+PART 2
+focus are generated at each integer multiple of distance.
+antennas count as focus
+
+"""
+
 
 #--------------------------------------------------------------------------------------------------------------------------------
 #   ALGORITHM
@@ -129,11 +136,31 @@ class Focus:
             return True #OOB
         return False
 
+    def process_focus( self, tnn_origin : Tuple[int, int], tnn_vector : Tuple[int, int] ) -> List[Tuple[int, int]]:
+        """
+        given an origin and a distance, compute all the integer multiples of vector that are not OOB
+        focus will occour at each integer multiple including 1, until the focus is OOB
+        """
+        #coordinate of a focus
+        tnn_focus = tnn_origin
+        #list of focuses
+        ltnn_focus = list()
+        #while the focus is within bounds
+        while self.is_oob(tnn_focus) == False:
+            #add focus to the list of focus
+            ltnn_focus.append(tnn_focus)
+            #move the focus
+            tnn_focus = self.sum_vector( tnn_focus, tnn_vector )
+        #return the focuses that are within bounds
+        return ltnn_focus
+
     def compute_focus(self):
         """
         for each pair of symbols
         create two focus in line with the symbols
         at the distance between the symbols
+        works for T example UNIQUE FOCUS: 9
+        works for example UNIQUE FOCUS: 34
         """
         #for each symbol
         for s_symbol in self.gd_symbol:
@@ -141,31 +168,32 @@ class Focus:
             self.gd_focus[s_symbol] = list()
             #get the list of coordinates where that symbol appear
             ltnn_coordinates = self.gd_symbol[s_symbol]
+            #allocate list of focus
+            ltnn_focus = list()
             #for each pair of coordinates
+            
             for tst_pair_of_coordinates in combinations( ltnn_coordinates, 2 ):
                 logging.debug(f"Pair: {tst_pair_of_coordinates}")
                 #compute distance between pair
                 tnn_vector_distance_ab = self.sub_vector( tst_pair_of_coordinates[1], tst_pair_of_coordinates[0])
-                #compute coordinate of first focus
-                tnn_focus_a = self.sub_vector( tst_pair_of_coordinates[0], tnn_vector_distance_ab )
-                tnn_focus_b = self.sum_vector( tst_pair_of_coordinates[1], tnn_vector_distance_ab )
-                logging.debug(f"Distance: {tnn_vector_distance_ab} Focus A {tnn_focus_a} OOB:{self.is_oob(tnn_focus_a)} | Focus B {tnn_focus_b} OOB:{self.is_oob(tnn_focus_b)} ")
-                #if coordinates are within the map, add them to the focus dictionary
-                if self.is_oob(tnn_focus_a) == False:
-                    self.gd_focus[s_symbol].append(tnn_focus_a)
-                    #add focus to the coordinate of the focus
-                    if tnn_focus_a not in self.gd_coordinate_focus:
-                        self.gd_coordinate_focus[tnn_focus_a] = 1
-                    else:
-                        self.gd_coordinate_focus[tnn_focus_a] += 1
-                if self.is_oob(tnn_focus_b) == False:
-                    self.gd_focus[s_symbol].append(tnn_focus_b)
-                    #add focus to the coordinate of the focus
-                    if tnn_focus_b not in self.gd_coordinate_focus:
-                        self.gd_coordinate_focus[tnn_focus_b] = 1
-                    else:
-                        self.gd_coordinate_focus[tnn_focus_b] += 1
-            logging.info(f"Number of focus for symbol {s_symbol}: {len(self.gd_focus[s_symbol])}")
+                #focuses that originate from this pair
+                ltnn_focus_from_pair = self.process_focus( tst_pair_of_coordinates[1], tnn_vector_distance_ab )
+                #add them to the total list of focusesd
+                ltnn_focus += ltnn_focus_from_pair
+                #do the same on the other end
+                tnn_vector_distance_ab = self.sub_vector( tst_pair_of_coordinates[0], tst_pair_of_coordinates[1])
+                ltnn_focus_from_pair = self.process_focus( tst_pair_of_coordinates[0], tnn_vector_distance_ab )
+                ltnn_focus += ltnn_focus_from_pair
+
+                logging.info(f"Number of focus for symbol {s_symbol}: {len(ltnn_focus)}")
+
+            for tnn_focus in ltnn_focus:
+                self.gd_focus[s_symbol].append(tnn_focus)
+                #add focus to the coordinate of the focus
+                if tnn_focus not in self.gd_coordinate_focus:
+                    self.gd_coordinate_focus[tnn_focus] = 1
+                else:
+                    self.gd_coordinate_focus[tnn_focus] += 1
             logging.info(f"Focus Coordinates: {self.gd_coordinate_focus}")
         print(f"UNIQUE FOCUS: {len(self.gd_coordinate_focus)}")
 
@@ -186,6 +214,7 @@ if __name__ == "__main__":
     logging.info("Begin") 
 
     cl_focus = Focus()
+    #cl_focus.load_map_from_file('day08\day_8_example_simple.txt')
     #cl_focus.load_map_from_file('day08\day_8_example.txt')
     cl_focus.load_map_from_file('day08\day_8_map.txt')
     cl_focus.show()
