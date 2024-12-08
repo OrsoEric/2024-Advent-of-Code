@@ -48,6 +48,10 @@ class Operator_finder:
         n_num_arg : int = 0
         ln_arguments : List[int] = list()
         s_operators : str = str()
+        #PLUS and MUL
+        #cs_operations = "+*"
+        #PLUS MUL AND PIPE
+        cs_operations = "+*|"
 
         def set( self, in_result: int, iln_argument : List[int] ) -> bool:
             self.n_result = in_result
@@ -62,7 +66,7 @@ class Operator_finder:
             """
             if in_num_operators <= 0:
                 return list() #FAIL
-            combinations = list(product("+*", repeat=in_num_operators))
+            combinations = list(product("{self.cs_operations}", repeat=in_num_operators))
             lln_operators = [''.join(combo) for combo in combinations]
             
             return lln_operators
@@ -75,7 +79,7 @@ class Operator_finder:
             if in_num_operators <= 0:
                 return list() #FAIL
             
-            combinations = list(product("+*", repeat=in_num_operators))
+            combinations = list(product(f"{self.cs_operations}", repeat=in_num_operators))
             for combo in combinations:
                 yield ''.join(combo)
             
@@ -105,6 +109,10 @@ class Operator_finder:
                     n_accumulator += self.ln_arguments[n_index+1]
                 elif s_operator == "*":
                     n_accumulator *= self.ln_arguments[n_index+1]
+                #pipe operator will concatenate a number of arguments to the accumulator
+                elif s_operator == "|":
+                    s_concatenate = f"{n_accumulator}{self.ln_arguments[n_index+1]}"
+                    n_accumulator = int(s_concatenate)
                 else:
                     logging.error("ERROR: invalid operator {s_operator}")
                     return 0
@@ -177,7 +185,8 @@ class Operator_finder:
 
     def solve(self) -> int:
         n_accumulator_result = 0
-        for st_equation in self.glst_equation:
+        for n_index, st_equation in enumerate(self.glst_equation):
+            print(f"solving {n_index} of {len(self.glst_equation)}")
             logging.debug("SOLVE:")
             st_equation.show()
             b_fail = st_equation.solve()
@@ -198,6 +207,7 @@ class Operator_finder:
                         file.write(s_equation + '\n')
         except Exception as e:
             logging.error(f"Save Failed: {e}")
+
 #--------------------------------------------------------------------------------------------------------------------------------
 #   MAIN
 #--------------------------------------------------------------------------------------------------------------------------------
@@ -223,5 +233,6 @@ if __name__ == "__main__":
     cl_operator_finder.load_equations(gs_filename_data)
     cl_operator_finder.show()
     n_accumulator_result = cl_operator_finder.solve()
-    cl_operator_finder.save_results('day07\day_7_output_part_1.txt')
+    #cl_operator_finder.save_results('day07\day_7_output_part_1.txt')
+    cl_operator_finder.save_results('day07\day_7_output_part_2.txt')
     print(f"accumulator: {n_accumulator_result}")
