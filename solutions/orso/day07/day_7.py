@@ -1,53 +1,204 @@
-"""
---- Day 7: Bridge Repair ---
+#--------------------------------------------------------------------------------------------------------------------------------
+#   INCLUDE
+#--------------------------------------------------------------------------------------------------------------------------------
 
-The Historians take you to a familiar rope bridge over a river in the middle of a jungle.
-The Chief isn't on this side of the bridge, though; maybe he's on the other side?
-When you go to cross the bridge, you notice a group of engineers trying to repair it.
-(Apparently, it breaks pretty frequently.) You won't be able to cross until it's fixed.
-You ask how long it'll take; the engineers tell you that it only needs final calibrations,
-but some young elephants were playing nearby and stole all the operators from their calibration equations!
-They could finish the calibrations if only someone could determine which test values could possibly be
-produced by placing any combination of operators into their calibration equations (your puzzle input).
+import logging
 
-For example:
-190: 10 19
-3267: 81 40 27
-83: 17 5
-156: 15 6
-7290: 6 8 6 15
-161011: 16 10 13
-192: 17 8 14
-21037: 9 7 18 13
-292: 11 6 16 20
+from itertools import product
 
-Each line represents a single equation.
-The test value appears before the colon on each line;
-it is your job to determine whether the remaining numbers can be combined with operators to produce the test value.
+import copy
 
-Operators are always evaluated left-to-right,
-not according to precedence rules.
-Furthermore, numbers in the equations cannot be rearranged.
-Glancing into the jungle, you can see elephants holding two different types of operators:
-add (+) and multiply (*).
+from typing import Generator, Dict, Tuple, List
 
-Only three of the above equations can be made true by inserting operators:
-
-    190: 10 19 has only one position that accepts an operator:
-    between 10 and 19.
-    Choosing + would give 29,
-    but choosing * would give the test value (10 * 19 = 190).
-
-    3267: 81 40 27 has two positions for operators.
-
-    Of the four possible configurations of the operators, two cause the right side to match the test value:
-    81 + 40 * 27 and 81 * 40 + 27 both equal 3267 (when evaluated left-to-right)!
-
-    292: 11 6 16 20 can be solved in exactly one way: 11 + 6 * 16 + 20.
-
-The engineers just need the total calibration result, which is the sum of the test values from just the equations that could possibly be true.
-In the above example, the sum of the test values for the three equations listed above is 3749.
-
-Determine which equations could possibly be true. What is their total calibration result?
+#--------------------------------------------------------------------------------------------------------------------------------
+#   RULES
+#--------------------------------------------------------------------------------------------------------------------------------
 
 """
+Rules:
+-You have a result
+-You have a list of arguments
+-In between arguments you can insert either + or *
+-Arguments are evaluated STRICTLY left to right
+    81 + 40 * 27
+        81+40 = 121
+    121 * 27 = 3267
+Objective:
+-Find the equations that can be made true
+-Sum the result of the equations that can be made true
+"""
+
+#--------------------------------------------------------------------------------------------------------------------------------
+#   ALGORITHM
+#--------------------------------------------------------------------------------------------------------------------------------
+
+"""
+Can I just try all combinations of operators?
+Better, I start with MUL. If it overflow, demote to PLUS?
+"""
+
+
+#--------------------------------------------------------------------------------------------------------------------------------
+#   MAIN
+#--------------------------------------------------------------------------------------------------------------------------------
+
+class Operator_finder:
+    class Equation:
+        n_result : int = 0
+        n_num_arg : int = 0
+        ln_arguments : List[int] = list()
+        s_operators : str = str()
+
+        def set( self, in_result: int, iln_argument : List[int] ) -> bool:
+            self.n_result = in_result
+            self.ln_arguments = iln_argument
+            self.n_num_arg = len(iln_argument)
+            return False #OK
+
+        def generate_operators(self, in_num_operators) -> List[List[str]]:
+            """
+            Knowing the number of arguments
+            I generate all possible combination of operators
+            """
+            if in_num_operators <= 0:
+                return list() #FAIL
+            combinations = list(product("+*", repeat=in_num_operators))
+            lln_operators = [''.join(combo) for combo in combinations]
+            
+            return lln_operators
+        
+        def operation_generator(self, in_num_operators) -> Generator[str, None, None]:
+            """
+            generator that will give a new operator combination every time it is called
+            """     
+
+            if in_num_operators <= 0:
+                return list() #FAIL
+            
+            combinations = list(product("+*", repeat=in_num_operators))
+            for combo in combinations:
+                yield ''.join(combo)
+            
+            return list() #FAIL
+
+        def show(self):
+            s_str = f"Result: {self.n_result} | Arguments: "
+            for n_arg in self.ln_arguments:
+                s_str += f"{n_arg} - "
+            logging.debug(f"{s_str}")
+
+        def evaluate(self, s_operators : str ) -> int:
+            """
+            the equation will b evaluated using the operators given
+
+            """
+            n_len_arg = len(self.ln_arguments)
+            n_len_op = len(s_operators)
+            if (n_len_arg != n_len_op +1):
+                logging.error(f"ERROR: inconsistent length: arguments: {n_len_arg} operators: {n_len_op}")
+                return -1
+            
+            #initialize accumulator
+            n_accumulator = self.ln_arguments[0]
+            for n_index, s_operator in enumerate(s_operators):
+                if s_operator == "+":
+                    n_accumulator += self.ln_arguments[n_index+1]
+                elif s_operator == "*":
+                    n_accumulator *= self.ln_arguments[n_index+1]
+                else:
+                    logging.error("ERROR: invalid operator {s_operator}")
+                    return 0
+            return n_accumulator
+
+        def solve(self) -> bool:
+            """
+            ask this equation to solve itself
+            return True mean FAIL
+            retunrr False mean found a solution
+            the solution is in the operator list
+            """
+
+            #create an operator generator
+
+            #print(st_equation.generate_operators(st_equation.n_num_arg))
+
+            if self.n_num_arg <= 1:
+                return True #FAIL
+            #Create a generator that will spit out the next combo of opetrators
+            gen_operators = self.operation_generator(self.n_num_arg -1)
+
+            b_continue = True
+            while b_continue:
+                try:
+                    s_operation = next(gen_operators)
+                    n_result = self.evaluate( s_operation )
+                    logging.debug(f"Operators: {s_operation} -> Result: {n_result} Expected Result: {self.n_result}")
+                    if n_result == self.n_result:
+                        self.s_operators = s_operation
+                        return False #Found solution
+                except StopIteration:
+                    b_continue = False  #solution not found           
+            return True #FAIL  
+
+    def __init__(self):
+        """
+        Initialize the Patrol_route class
+        """
+        self.glst_equation : List[self.Equation]= list()
+
+    def load_equations(self, s_filename: str):
+        """
+        Load equations from a file and populate the lst_equation list
+        """
+        with open(s_filename, 'r') as file:
+            for line in file:
+                parts = line.split(':')
+                n_result = int(parts[0].strip())
+                ln_arguments = list(map(int, parts[1].split()))
+                st_equation = self.Equation()
+                st_equation.set(n_result, ln_arguments)
+                self.glst_equation.append( st_equation )
+
+    def show(self):
+        for st_equation in self.glst_equation:
+            st_equation.show()
+
+    def solve(self) -> int:
+        n_accumulator_result = 0
+        for st_equation in self.glst_equation:
+            logging.debug("SOLVE:")
+            st_equation.show()
+            b_fail = st_equation.solve()
+            if (b_fail == False):
+                n_accumulator_result += st_equation.n_result
+                logging.debug(f"SOLUTION: {st_equation.s_operators} {st_equation.n_result} -> Accumulator: {n_accumulator_result}")
+            else:
+                logging.debug(f"NOT SOLVABLE:")
+        return n_accumulator_result
+
+#--------------------------------------------------------------------------------------------------------------------------------
+#   MAIN
+#--------------------------------------------------------------------------------------------------------------------------------
+
+# Example usage
+#gs_filename_output = 'day07\day_7_map_output.txt'
+gs_filename_example = 'day07\day_7_example.txt'
+gs_filename_data = 'day07\day_7_data.txt'
+#   if interpreter has the intent of executing this file
+if __name__ == "__main__":
+    logging.basicConfig(
+        filename='day07\day_7.log',
+        # Specify the log file name
+        level=logging.DEBUG,
+        # Set the level of debug to show
+        format='[%(asctime)s] %(levelname)s %(module)s:%(lineno)d > %(message)s ',
+        filemode='w'
+    )
+    logging.info("Begin") 
+
+    cl_operator_finder = Operator_finder()
+    #cl_operator_finder.load_equations(gs_filename_example)
+    cl_operator_finder.load_equations(gs_filename_data)
+    cl_operator_finder.show()
+    n_accumulator_result = cl_operator_finder.solve()
+    print(f"accumulator: {n_accumulator_result}")
