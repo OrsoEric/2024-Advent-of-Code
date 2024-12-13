@@ -56,7 +56,8 @@ class Problem:
         False OK
         """
         if b_debug:
-            logging.debug(f"PROBLEM\nMatrix A:\n{self.gm_a}\nOUT:\n{self.gm_out}")
+            formatted_solution = [f"{x:.0f}" for x in self.gm_out]
+            logging.debug(f"PROBLEM\nMatrix A:\n{self.gm_a}\nOUT:\n{formatted_solution}")
         n_determinant = numpy.linalg.det(self.gm_a)
         n_condition_number = numpy.linalg.cond(self.gm_a)
         if b_debug:
@@ -69,15 +70,19 @@ class Problem:
             self.gm_in = numpy.matmul(self.gm_out,m_a_inverse)
             #make the numbers integer
             if b_debug:
-                logging.debug(f"Solution f: {self.gm_in}")
+                formatted_solution = [f"{x:.0f}" for x in self.gm_in]
+                logging.debug(f"Solution f: {formatted_solution}")
             self.gm_in[0] = round(self.gm_in[0])
             self.gm_in[1] = round(self.gm_in[1])
             if b_debug:
-                logging.debug(f"Solution i: {self.gm_in}")
+                formatted_solution = [f"{x:.0f}" for x in self.gm_in]
+                logging.debug(f"Solution i: {formatted_solution}")
             test_solution = numpy.matmul(self.gm_in,self.gm_a)
             n_error = numpy.linalg.norm(test_solution-self.gm_out)
             if b_debug:
-                logging.debug(f"Test Solution: {test_solution} Error {n_error}")
+                formatted_solution = [f"{x:.0f}" for x in test_solution]
+                formatted_error = f"{n_error:.6f}"
+                logging.debug(f"Test Solution: {formatted_solution} Error {formatted_error}")
             if n_error > self.cn_error_limit:
                 return False, True #FAIL
         else:
@@ -89,10 +94,11 @@ class Problem:
 
 class Claw_machine:
     def __init__(self):
+        self.cn_big_offset = 10000000000000 
         self.glcl_problems : List[Problem] = list()
         self.glcl_unsolved_problems : List[Problem] = list()
 
-    def load_problems_from_file(self, is_filename ) -> bool:
+    def load_problems_from_file(self, is_filename, b_add_offset=False ) -> bool:
         with open(is_filename, 'r') as file:
             ls_lines = file.readlines()
             #initialize the problem parameters
@@ -110,6 +116,9 @@ class Claw_machine:
                 elif parts[0].startswith('Prize'):
                     ln_out[0] = int(parts[0].split('=')[1])
                     ln_out[1] = int(parts[1].split('=')[1])
+                    if b_add_offset:
+                        ln_out[0] += self.cn_big_offset 
+                        ln_out[1] += self.cn_big_offset 
                     cl_problem = Problem()
                     cl_problem.load_parameters( ln_button_a, ln_button_b, ln_out )
                     #append the problem to the list of problems
@@ -124,7 +133,7 @@ class Claw_machine:
         """
         each claw machine has spawned a problem
         """
-
+        b_button_limit_disabled = True
         n_token = 0
         n_total_token = 0
         n_cnt_too_many_buttons = 0
@@ -141,7 +150,7 @@ class Claw_machine:
             else:
                 ln_button = cl_problem.get_in()
                 #if don't press too many buttons
-                if (ln_button[0] < 100) and (ln_button[1] < 100):
+                if b_button_limit_disabled or (ln_button[0] < 100) and (ln_button[1] < 100):
                     n_cnt_valid += 1
                     #valid solution
                     n_token = ln_button[0]*3 +ln_button[1]
@@ -171,8 +180,10 @@ if __name__ == "__main__":
     logging.info("Begin")
 
     cl_claw_machine = Claw_machine()
-    #cl_claw_machine.load_problems_from_file("day13/day13-example.txt")
-    cl_claw_machine.load_problems_from_file("day13/day13-data.txt")
+    #cl_claw_machine.load_problems_from_file("day13/day13-example.txt",b_add_offset=True)
+    #cl_claw_machine.load_problems_from_file("day13/day13-example-big.txt")
+    #cl_claw_machine.load_problems_from_file("day13/day13-data.txt")
+    cl_claw_machine.load_problems_from_file("day13/day13-data.txt",b_add_offset=True)
     cl_claw_machine.find_solutions()
 
 

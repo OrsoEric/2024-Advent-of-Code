@@ -48,6 +48,33 @@ You estimate that each button would need to be pressed no more than 100 times to
 
 Figure out how to win as many prizes as possible. What is the fewest tokens you would have to spend to win all possible prizes?
 
+--- Part Two ---
+
+As you go to win the first prize, you discover that the claw is nowhere near where you expected it would be. Due to a unit conversion error in your measurements, the position of every prize is actually 10000000000000 higher on both the X and Y axis!
+
+Add 10000000000000 to the X and Y position of every prize. After making this change, the example above would now look like this:
+
+Button A: X+94, Y+34
+Button B: X+22, Y+67
+Prize: X=10000000008400, Y=10000000005400
+
+Button A: X+26, Y+66
+Button B: X+67, Y+21
+Prize: X=10000000012748, Y=10000000012176
+
+Button A: X+17, Y+86
+Button B: X+84, Y+37
+Prize: X=10000000007870, Y=10000000006450
+
+Button A: X+69, Y+23
+Button B: X+27, Y+71
+Prize: X=10000000018641, Y=10000000010279
+
+Now, it is only possible to win a prize on the second and fourth claw machines. Unfortunately, it will take many more than 100 presses to do so.
+
+Using the corrected prize coordinates, figure out how to win as many prizes as possible. What is the fewest tokens you would have to spend to win all possible prizes?
+
+
 _______________________________________________________________________________________________________________________________________
 
 Algorithm
@@ -105,3 +132,77 @@ OUT:
 [2024-12-13 17:00:48,025] DEBUG day13:76 > Solution i: [97. 22.] 
 [2024-12-13 17:00:48,025] DEBUG day13:80 > Test Solution: [ 3109. 10505.] Error 93.47192091746055 
 [2024-12-13 17:00:48,025] DEBUG day13:59 > PROBLEM
+
+
+Matrix A:
+[[36. 76.]
+ [56. 12.]]
+OUT:
+['19412', '2980'] 
+[2024-12-13 17:25:11,021] DEBUG day13:64 > determinant: -3824.0000000000027 Condition number: 2.265759948980041 
+[2024-12-13 17:25:11,021] DEBUG day13:74 > Solution f: ['-17', '358'] 
+[2024-12-13 17:25:11,021] DEBUG day13:79 > Solution i: ['-17', '358'] 
+[2024-12-13 17:25:11,021] DEBUG day13:85 > Test Solution: ['19436', '3004'] Error 33.941125 
+[2024-12-13 17:25:11,021] DEBUG day13:162 > VALID: 186 
+[2024-12-13 17:25:11,021] DEBUG day13:163 > ERR: Singular: 0 
+[2024-12-13 17:25:11,021] DEBUG day13:164 > ERR: Integer: 134 
+[2024-12-13 17:25:11,021] DEBUG day13:165 > ERR: Buttons: 0 
+[2024-12-13 17:25:11,021] DEBUG day13:166 > Total Cost: 39996.0 
+
+_______________________________________________________________________________________________________________________________________
+
+I just have to deal with some numerical cancellation, maybe not even that. Just vis issues?
+Matrix A:
+[[69. 23.]
+ [27. 71.]]
+OUT:
+['10000000018641', '10000000010279'] 
+[2024-12-13 17:18:20,497] DEBUG day13:64 > determinant: 4278.000000000002 Condition number: 2.111787822128271 
+[2024-12-13 17:18:20,497] DEBUG day13:74 > Solution f: ['102851800151', '107526881786'] 
+[2024-12-13 17:18:20,497] DEBUG day13:79 > Solution i: ['102851800151', '107526881786'] 
+[2024-12-13 17:18:20,497] DEBUG day13:85 > Test Solution: ['10000000018641', '10000000010279'] Error 0.000000 
+[2024-12-13 17:18:20,497] DEBUG day13:154 > SOLUTION: [102851800151.0, 107526881786.0] | Cost 416082282239.0 Total 875318608908.0 
+[2024-12-13 17:18:20,497] DEBUG day13:158 > VALID: 2 
+[2024-12-13 17:18:20,497] DEBUG day13:159 > ERR: Singular: 0 
+[2024-12-13 17:18:20,497] DEBUG day13:160 > ERR: Integer: 2 
+[2024-12-13 17:18:20,497] DEBUG day13:161 > ERR: Buttons: 0 
+[2024-12-13 17:18:20,497] DEBUG day13:162 > Total Cost: 875318608908.0 
+
+Result is the same with example, and example with offset
+Matrix A:
+[[10. 20.]
+ [40. 80.]]
+OUT:
+['10000000003333', '10000000004444'] 
+[2024-12-13 17:21:10,998] DEBUG day13:64 > determinant: 0.0 Condition number: inf 
+[2024-12-13 17:21:10,998] DEBUG day13:90 > SINGULAR!!! 
+[2024-12-13 17:21:10,998] DEBUG day13:158 > SOLUTION: [0.0, 0.0] | Cost 0.0 Total 875318608908.0 
+[2024-12-13 17:21:10,998] DEBUG day13:162 > VALID: 3 
+[2024-12-13 17:21:10,998] DEBUG day13:163 > ERR: Singular: 1 
+[2024-12-13 17:21:10,998] DEBUG day13:164 > ERR: Integer: 2 
+[2024-12-13 17:21:10,998] DEBUG day13:165 > ERR: Buttons: 0 
+[2024-12-13 17:21:10,998] DEBUG day13:166 > Total Cost: 875318608908.0 
+
+[2024-12-13 17:21:51,744] DEBUG day13:162 > VALID: 137 
+[2024-12-13 17:21:51,744] DEBUG day13:163 > ERR: Singular: 1 
+[2024-12-13 17:21:51,744] DEBUG day13:164 > ERR: Integer: 188 
+[2024-12-13 17:21:51,744] DEBUG day13:165 > ERR: Buttons: 0 
+[2024-12-13 17:21:51,744] DEBUG day13:166 > Total Cost: 74142902935775.0 
+ANSWER TOO HIGH
+
+
+Matrix A:
+[[36. 76.]
+ [56. 12.]]
+OUT:
+['10000000019412', '10000000002980'] 
+[2024-12-13 17:25:39,899] DEBUG day13:64 > determinant: -3824.0000000000027 Condition number: 2.265759948980041 
+[2024-12-13 17:25:39,899] DEBUG day13:74 > Solution f: ['115062761489', '104602510818'] 
+[2024-12-13 17:25:39,899] DEBUG day13:79 > Solution i: ['115062761489', '104602510818'] 
+[2024-12-13 17:25:39,899] DEBUG day13:85 > Test Solution: ['10000000019412', '10000000002980'] Error 0.000000 
+[2024-12-13 17:25:39,899] DEBUG day13:158 > SOLUTION: [115062761489.0, 104602510818.0] | Cost 449790795285.0 Total 73267584326867.0 
+[2024-12-13 17:25:39,899] DEBUG day13:162 > VALID: 134 
+[2024-12-13 17:25:39,899] DEBUG day13:163 > ERR: Singular: 0 
+[2024-12-13 17:25:39,899] DEBUG day13:164 > ERR: Integer: 186 
+[2024-12-13 17:25:39,899] DEBUG day13:165 > ERR: Buttons: 0 
+[2024-12-13 17:25:39,899] DEBUG day13:166 > Total Cost: 73267584326867.0 
