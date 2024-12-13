@@ -77,3 +77,35 @@ A region of S plants with price 3 * 8 = 24.
 So, it has a total price of 1930.
 
 What is the total price of fencing all regions on your map?
+
+
+
+
+
+_______________________________________________________________________________________________________________________________________
+
+Algorithm
+I use a list of dictionaries to store all the coordinates of a plot
+the dictionary associate each coordinate with how many neighbour of the same plot is that surrounded with
+Filling the dictionaries is with a adjacency algorithm, I cannot trust the letter to be unique, but I know that letter change mean plot change
+once I have a dictionary of coordinates, it should all be easy
+I should build a proper coordinate class to process tuples as coordinates
+
+example 4x4 SUCCESS
+[2024-12-13 11:02:46,456] INFO day12:140 > Plot Area: 4 | Plot Perimeter: 10 | Fence Price 40 
+[2024-12-13 11:02:46,456] INFO day12:140 > Plot Area: 4 | Plot Perimeter: 8 | Fence Price 32 
+[2024-12-13 11:02:46,456] INFO day12:140 > Plot Area: 4 | Plot Perimeter: 10 | Fence Price 40 
+[2024-12-13 11:02:46,456] INFO day12:140 > Plot Area: 1 | Plot Perimeter: 4 | Fence Price 4 
+[2024-12-13 11:02:46,456] INFO day12:140 > Plot Area: 3 | Plot Perimeter: 8 | Fence Price 24 
+[2024-12-13 11:02:46,456] INFO day12:142 > Total Fence Price: 140 
+
+example 5x5 SUCCESS
+[2024-12-13 11:02:14,442] INFO day12:140 > Plot Area: 21 | Plot Perimeter: 36 | Fence Price 756 
+[2024-12-13 11:02:14,442] INFO day12:140 > Plot Area: 1 | Plot Perimeter: 4 | Fence Price 4 
+[2024-12-13 11:02:14,442] INFO day12:140 > Plot Area: 1 | Plot Perimeter: 4 | Fence Price 4 
+[2024-12-13 11:02:14,442] INFO day12:140 > Plot Area: 1 | Plot Perimeter: 4 | Fence Price 4 
+[2024-12-13 11:02:14,442] INFO day12:140 > Plot Area: 1 | Plot Perimeter: 4 | Fence Price 4 
+[2024-12-13 11:02:14,442] INFO day12:142 > Total Fence Price: 772 
+
+PART 1 SUCCESS!!!
+[2024-12-13 11:04:11,946] INFO day12:142 > Total Fence Price: 1352976 
