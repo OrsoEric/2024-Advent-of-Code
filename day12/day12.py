@@ -10,6 +10,8 @@ from typing import Set, Dict, List, Tuple
 
 from map_of_symbols import Map_of_symbols
 
+from shape import Shape
+
 #------------------------------------------------------------------------------------------------------------------------------
 #   RULES
 #------------------------------------------------------------------------------------------------------------------------------
@@ -128,7 +130,7 @@ class Farm:
         n_total_price = 0
         for dtnn_plot in self.gld_plots:
             n_area = len(dtnn_plot)
-            #for all coordinates
+            #for all coordinatesex
             n_perimeter_total = 0
             for tnn_coordinate in dtnn_plot:
                 n_perimeter = 4 -dtnn_plot[tnn_coordinate]
@@ -141,6 +143,22 @@ class Farm:
 
         logging.info(f"Total Fence Price: {n_total_price}")
 
+    def compute_fence_price_with_discount(self) -> bool:
+        
+        n_total_price = 0
+
+        for dtnn_plot in self.gld_plots:
+            cl_shape = Shape()
+            cl_shape.load_shape( dtnn_plot.keys() ) 
+            (n_area, n_perimeter, n_sides) = cl_shape.get_stats()
+            n_price = n_area * n_sides
+            n_total_price += n_price
+            logging.info(f"Area: {n_area} | Perimeter: {n_perimeter} | Sides: {n_sides} | PRICE: {n_price}")
+            
+        logging.info(f"TOTAL PRICE: {n_total_price}")
+        return False #OK
+
+
 #------------------------------------------------------------------------------------------------------------------------------
 #   MAIN
 #------------------------------------------------------------------------------------------------------------------------------
@@ -148,7 +166,7 @@ class Farm:
 if __name__ == "__main__":
     logging.basicConfig(
         filename="day12/day12.log",
-        level=logging.DEBUG,
+        level=logging.INFO,
         format='[%(asctime)s] %(levelname)s %(module)s:%(lineno)d > %(message)s ',
         filemode='w'
     )
@@ -157,7 +175,11 @@ if __name__ == "__main__":
     cl_farm = Farm()
     #cl_farm.load_farm("day12/day12-example-4x4.txt")
     #cl_farm.load_farm("day12/day12-example-5x5.txt")
+    #cl_farm.load_farm("day12/day12-example-5x5e.txt")
+    #cl_farm.load_farm("day12/day12-example-10x10.txt")
     cl_farm.load_farm("day12/day12-data.txt")
+
     cl_farm.compute_plots()
-    cl_farm.compute_fence_price()
+    #cl_farm.compute_fence_price()
+    cl_farm.compute_fence_price_with_discount()
     
