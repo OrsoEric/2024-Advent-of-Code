@@ -13,6 +13,10 @@ from typing import Set, Dict, List, Tuple
 #enumeration support
 from enum import Enum, auto
 
+#PART 2 requires finding a patter I do not know...
+#let's hope the pattern has a large number of adjacent coordinates
+from shape import Shape
+
 #------------------------------------------------------------------------------------------------------------------------------
 #   RULES
 #------------------------------------------------------------------------------------------------------------------------------
@@ -91,6 +95,27 @@ class Robot_security:
         logging.info(s_lines)
         return False # OK
     
+    def show_pattern(self):
+        """
+        Prints the room size and the robot data in a grid pattern.
+        """
+        s_lines = f"Room Size:\nHeight={self.gn_height}, Width={self.gn_width}\n"
+        room_grid = numpy.full((self.gn_height, self.gn_width), '.')
+
+        for n_index, ln_robot in enumerate(self.gm_robot_data):
+            x, y = ln_robot[self.E_ROBOT.PX.value], ln_robot[self.E_ROBOT.PY.value]
+            if 0 <= x < self.gn_width and 0 <= y < self.gn_height:
+                room_grid[y, x] = '#'
+                #if room_grid[y, x] == '.':
+                #    room_grid[y, x] = f"{1}"
+                #else:
+                #    room_grid[y, x] = f"{int(room_grid[y, x])+1}"
+        for row in room_grid:
+            s_lines += ''.join(row) + "\n"
+
+        logging.info(s_lines.strip())
+        return False # OK
+
     def simulate_step(self):
         # Simulate a robot step
         #ADD the speed to the position
@@ -122,7 +147,8 @@ class Robot_security:
             b_fail = self.simulate_step()
             if b_fail:
                 return True #FAIL
-            self.show()
+            #self.show()
+            self.show_pattern()
             cl_robot_security.count_robots_in_quadrants()
         return False #OK
     
@@ -201,10 +227,35 @@ class Robot_security:
         logging.info(f"Safety Factor: {n_safety_factor}")
         return False #OK
 
+    def find_pattern(self, in_steps : int, in_minimum_cluster : int )->bool:
+        """
+        simulate a fixed number of steps
+        """
+        
 
+        for n_step in range(in_steps):
+            print(f"step: {n_step} in {range(in_steps)}")
+            logging.info(f"STEP {n_step+1}")
+            b_fail = self.simulate_step()
+            if b_fail:
+                logging.error("ERROR: FAILED TO SIMULATE")
+                return True #FAIL
+            #extract a list of coordinates
+            ln_coordinate = list()
+            for ln_robot in self.gm_robot_data:
+                ln_coordinate.append( (ln_robot[self.E_ROBOT.PX.value], ln_robot[self.E_ROBOT.PY.value]))
+            
+            #now make use of the shape class to find clusters
+            cl_shape = Shape()
+            ldtnn_shape = cl_shape.find_shapes(ln_coordinate)
+            #look for the biggest cluster
+            largest_set = max( ldtnn_shape, key=len)
+            logging.debug(f"Largest Set: {len(largest_set)} {largest_set}")
+            #print it if it's big enough
+            if (len(largest_set) > in_minimum_cluster):
+                self.show_pattern()
 
-
-
+        return False #OK
 
 
 #------------------------------------------------------------------------------------------------------------------------------
@@ -214,20 +265,21 @@ class Robot_security:
 if __name__ == "__main__":
     logging.basicConfig(
         filename="day14/day14.log",
-        level=logging.INFO,
+        level=logging.DEBUG,
         format='[%(asctime)s] %(levelname)s %(module)s:%(lineno)d > %(message)s ',
         filemode='w'
     )
     logging.info("Begin")
 
     cl_robot_security = Robot_security()
-    #cl_robot_security.load_from_file("day14/day14-example.txt")
     #cl_robot_security.load_from_file("day14/day14-example-simple.txt")
+    #cl_robot_security.load_from_file("day14/day14-example.txt")
+    
     cl_robot_security.load_from_file("day14/day14-data.txt")
-    cl_robot_security.simulate(100)
+    #cl_robot_security.simulate(300)
+    #cl_robot_security.simulate(10)
+    cl_robot_security.find_pattern(10000, 10)
     
     cl_robot_security.show()
-
-
 
 
