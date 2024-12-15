@@ -532,3 +532,49 @@ Width: 50 | Height: 50
 PART 1 SUCCESS!
 
 ______________________________________________________________________________
+
+PART2
+
+Can't I just add a fractional part to the robot position?
+And use a special symbol for boxes that are half STEP
+
+#[]
+#O
+
+#.[].
+#oo
+
+What if I just use half robots as well?
+> half east
+< half west
+I don't need to use the half position. I did it wrong anyway
+
+It adds some translation rules, but not much?
+pushing down I still need to push down half on the other side
+
+The simulation change add a fraction to the wide direction of the robot.
+The simulation adds [ and ] to the boxes
+
+RULE:HALF MOVE TOWARD A VOID
+.@.  hX=0
+E
+.@.  hX=+1/2
+E
+..@  hX=0
+
+>>>>>><<<<<<<<<<<<<<vvvvvvvvvvvvv^^^^^^^^^^^^^^^^
+Instruction to test void move, and wall avoidance: SUCCESS!
+
+RULE: PUSH BARREL HORIZONTALLY
+I need to store the barrel half position, I do so using the square bracket symbols
+.@O.... hX=0
+E
+.@[]... hX=+1/2
+E
+..@O... hX=0
+I can push half barrel ONLY when I'm already halfway there
+
+
+
+
+
