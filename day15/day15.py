@@ -12,6 +12,8 @@ from typing import Set, Dict, List, Tuple
 
 from map_cartesian import Map_cartesian
 
+from body_collision import Body_collision
+
 #------------------------------------------------------------------------------------------------------------------------------
 #   RULES
 #------------------------------------------------------------------------------------------------------------------------------
@@ -31,13 +33,6 @@ class Robot_instruction:
         self.cs_robot = '@'
         self.cs_wall = '#'
         self.cs_box = 'O'
-        #robot can be moved into half position (start fefault west/left)
-        self.cs_robot_half_west = '<'
-        self.cs_robot_half_east = '>'
-        #boxes can be moved half position
-        self.cs_box_half_west = '['
-        self.cs_box_half_east = ']'
-        self.cs_box_double_half = 'X'
         #robot instructions
         self.cs_commands = "^>v<"
         #class to handle maps
@@ -142,7 +137,7 @@ class Robot_instruction:
     def find_robot_in_map( self ) -> Tuple[bool, Tuple[int,int]]:
 
         #find the robot
-        b_fail, ltnn_robots = self.gcl_map.find_symbol(self.cs_robot_half_west)
+        b_fail, ltnn_robots = self.gcl_map.find_symbol(self.cs_robot)
         if b_fail:
             logging.error("ERROR: could not find robot")
             return True #FAIL
@@ -575,6 +570,35 @@ class Robot_instruction:
         return False #OK
 
 
+def solution() -> bool:
+    cl_warehouse = Robot_instruction()
+    #cl_warehouse.load_map_and_instructions_from_file("day15/day15-example-small.txt")
+    #cl_warehouse.load_map_and_instructions_from_file("day15/day15-example-small-b.txt")
+    #cl_warehouse.load_map_and_instructions_from_file("day15/day15-example-simple.txt")
+    cl_warehouse.load_map_and_instructions_from_file("day15/day15-example.txt")
+    #cl_warehouse.load_map_and_instructions_from_file("day15/day15-data.txt")
+    #cl_warehouse.simulate()
+    #cl_warehouse.simulate_half_width(True)
+    #cl_warehouse.compute_part_1_result()
+    
+    tnn_start = (0,0)
+    tnn_size = cl_warehouse.gcl_map.get_size()
+    logging.info(f"Bounding box | Start {tnn_start} End {tnn_size}")
+
+    cl_collision = Body_collision()
+    #add four line
+    
+    b_fail, ln_id = cl_collision.add_box_top_left( tnn_start, tnn_size, "wall")
+    if b_fail:
+        logging.error("ERROR: failed to set boundary size")
+        return True #FAIL
+
+    #cl_collision.add_line( )
+
+    
+
+    return False #OK
+
 #------------------------------------------------------------------------------------------------------------------------------
 #   MAIN
 #------------------------------------------------------------------------------------------------------------------------------
@@ -588,12 +612,4 @@ if __name__ == "__main__":
     )
     logging.info("Begin")
 
-    cl_warehouse = Robot_instruction()
-    #cl_warehouse.load_map_and_instructions_from_file("day15/day15-example-small.txt")
-    #cl_warehouse.load_map_and_instructions_from_file("day15/day15-example-small-b.txt")
-    cl_warehouse.load_map_and_instructions_from_file("day15/day15-example-simple.txt")
-    #cl_warehouse.load_map_and_instructions_from_file("day15/day15-example.txt")
-    #cl_warehouse.load_map_and_instructions_from_file("day15/day15-data.txt")
-    #cl_warehouse.simulate()
-    cl_warehouse.simulate_half_width(True)
-    cl_warehouse.compute_part_1_result()
+    solution()

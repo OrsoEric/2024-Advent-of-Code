@@ -196,7 +196,7 @@ class Map_of_symbols:
         Returns the dimensions of the map.
 
         Returns:
-            Tuple[int, int]: Width and height of the map.
+            Tuple[int, int]: Height (Y) and Width (X) of the map.
         """
         return self.gn_width, self.gn_height
 
@@ -252,3 +252,12 @@ class Map_of_symbols:
             if s_symbol_at_coord == is_symbol:
                 ltnn_coordinates.append(tnn_coordinate)
         return False, ltnn_coordinates  # Success, return list of coordinates
+    
+    def clear_map(self, is_default_value):
+        for tnn_coordinate in self:
+            b_fail = self.set_coordinate( tnn_coordinate, is_default_value )
+            if b_fail:
+                logging.error(f"ERROR: failed to set coordinate {tnn_coordinate} to {is_default_value}")
+                return True #FAIL
+        return False #OK
+

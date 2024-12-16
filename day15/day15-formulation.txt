@@ -575,6 +575,362 @@ E
 I can push half barrel ONLY when I'm already halfway there
 
 
+______________________________________________________________________________
+
+A few hours and I can make cascade collision symbolic rules, but I can't be bothered
+I'd rather do a more useful class
+
+Collision
+
+it's a class that takes a dictionary of >body<
+key is the coordinate 
+item is the body characteristic.
+I can also add more features
+
+body has a radious and coordinates
+
+I have a .apply() and .discard()
+I .move a body
+The base class just has boundaries, dictionary and collision detection
+
+______________________________________________________________________________
+
+SMALL SIMULATION
+
+simulation with collision now processes small example successfully!
+
+Width: 8 | Height: 8
+# # # # # # # # 
+# . . . . O O # 
+# # . . . . . # 
+# . . . . . O # 
+# . # O @ . . # 
+# . . . O . . # 
+# . . . O . . # 
+# # # # # # # #  
+[2024-12-16 13:44:19,522] INFO day15-part2:332 > New Robot position: Center (4.5, 4.5) | Next Center (4.5, 4.5) | Size (0.99, 0.99) | Type robot 
+[2024-12-16 13:44:19,522] INFO day15-part2:341 > STEP:   15 | Command: (0, -1.0) 
+[2024-12-16 13:44:19,522] DEBUG day15-part2:286 > Num Collisions: 1 | Collisions: [33] 
+[2024-12-16 13:44:19,523] DEBUG day15-part2:315 > collisions: [16, 33] 
+[2024-12-16 13:44:19,523] DEBUG day15-part2:304 > WALL. Forbidden from moving 
+[2024-12-16 13:44:19,523] DEBUG day15-part2:325 > Boxes whose update has been discarded: 2 
+[2024-12-16 13:44:19,523] INFO day15-part2:255 > Map updated successfully from collision data 
+[2024-12-16 13:44:19,523] INFO map_of_symbols:145 > 
+Width: 8 | Height: 8
+# # # # # # # # 
+# . . . . O O # 
+# # . . . . . # 
+# . . . . . O # 
+# . # O @ . . # 
+# . . . O . . # 
+# . . . O . . # 
+# # # # # # # #  
+should be:
+########
+#....OO#
+##.....#
+#.....O#
+#.#O@..#
+#...O..#
+#...O..#
+########
+
+MEDIUM SIMULATION
+
+[2024-12-16 13:46:49,413] INFO day15-part2:341 > STEP:  700 | Command: (-1.0, 0) 
+[2024-12-16 13:46:49,413] DEBUG day15-part2:286 > Num Collisions: 0 | Collisions: [] 
+[2024-12-16 13:46:49,413] DEBUG day15-part2:322 > Boxes updated: 1 
+[2024-12-16 13:46:49,413] INFO day15-part2:255 > Map updated successfully from collision data 
+[2024-12-16 13:46:49,413] INFO map_of_symbols:145 > 
+Width: 10 | Height: 10
+# # # # # # # # # # 
+# . O . O . O O O # 
+# . . . . . . . . # 
+# O O . . . . . . # 
+# O O @ . . . . . # 
+# O # . . . . . O # 
+# O . . . . . O O # 
+# O . . . . . O O # 
+# O O . . . . O O # 
+# # # # # # # # # #  
+
+should be:
+##########
+#.O.O.OOO#
+#........#
+#OO......#
+#OO@.....#
+#O#.....O#
+#O.....OO#
+#O.....OO#
+#OO....OO#
+##########
+
+FP SIMULATION
+7X7 EXAMPLE SUCCESS?
+
+[2024-12-16 13:50:04,293] INFO day15-part2:341 > STEP:   11 | Command: (-1.0, 0) 
+[2024-12-16 13:50:04,293] DEBUG day15-part2:286 > Num Collisions: 1 | Collisions: [25] 
+[2024-12-16 13:50:04,294] DEBUG day15-part2:315 > collisions: [] 
+[2024-12-16 13:50:04,294] DEBUG day15-part2:322 > Boxes updated: 2 
+[2024-12-16 13:50:04,294] INFO day15-part2:255 > Map updated successfully from collision data 
+[2024-12-16 13:50:04,294] INFO map_of_symbols:145 > 
+Width: 7 | Height: 7
+# # # # # # # 
+# . O . # . # 
+# . @ . O . # 
+# . . O . . # 
+# . . . . . # 
+# . . . . . # 
+# # # # # # #  
+the map isn't showing FP coordinates
+[2024-12-16 13:53:49,490] INFO day15-part2:332 > New Robot position: Center (2.5, 2.75) | Next Center (2.5, 2.75) | Size (0.99, 0.49) | Type robot 
+[2024-12-16 13:53:49,490] INFO body_collision:399 > ID: 0 | Box: Center (0.5, 0.5) | Next Center (0.5, 0.5) | Size (0.99, 0.99) | Type wall 
+[2024-12-16 13:53:49,490] INFO body_collision:399 > ID: 1 | Box: Center (0.5, 1.5) | Next Center (0.5, 1.5) | Size (0.99, 0.99) | Type wall 
+[2024-12-16 13:53:49,490] INFO body_collision:399 > ID: 2 | Box: Center (0.5, 2.5) | Next Center (0.5, 2.5) | Size (0.99, 0.99) | Type wall 
+[2024-12-16 13:53:49,491] INFO body_collision:399 > ID: 3 | Box: Center (0.5, 3.5) | Next Center (0.5, 3.5) | Size (0.99, 0.99) | Type wall 
+[2024-12-16 13:53:49,491] INFO body_collision:399 > ID: 4 | Box: Center (0.5, 4.5) | Next Center (0.5, 4.5) | Size (0.99, 0.99) | Type wall 
+[2024-12-16 13:53:49,491] INFO body_collision:399 > ID: 5 | Box: Center (0.5, 5.5) | Next Center (0.5, 5.5) | Size (0.99, 0.99) | Type wall 
+[2024-12-16 13:53:49,491] INFO body_collision:399 > ID: 6 | Box: Center (0.5, 6.5) | Next Center (0.5, 6.5) | Size (0.99, 0.99) | Type wall 
+[2024-12-16 13:53:49,491] INFO body_collision:399 > ID: 7 | Box: Center (1.5, 0.5) | Next Center (1.5, 0.5) | Size (0.99, 0.99) | Type wall 
+[2024-12-16 13:53:49,491] INFO body_collision:399 > ID: 8 | Box: Center (1.5, 4.5) | Next Center (1.5, 4.5) | Size (0.99, 0.99) | Type wall 
+[2024-12-16 13:53:49,491] INFO body_collision:399 > ID: 9 | Box: Center (1.5, 6.5) | Next Center (1.5, 6.5) | Size (0.99, 0.99) | Type wall 
+[2024-12-16 13:53:49,491] INFO body_collision:399 > ID: 10 | Box: Center (2.5, 0.5) | Next Center (2.5, 0.5) | Size (0.99, 0.99) | Type wall 
+[2024-12-16 13:53:49,491] INFO body_collision:399 > ID: 11 | Box: Center (2.5, 6.5) | Next Center (2.5, 6.5) | Size (0.99, 0.99) | Type wall 
+[2024-12-16 13:53:49,491] INFO body_collision:399 > ID: 12 | Box: Center (3.5, 0.5) | Next Center (3.5, 0.5) | Size (0.99, 0.99) | Type wall 
+[2024-12-16 13:53:49,491] INFO body_collision:399 > ID: 13 | Box: Center (3.5, 6.5) | Next Center (3.5, 6.5) | Size (0.99, 0.99) | Type wall 
+[2024-12-16 13:53:49,491] INFO body_collision:399 > ID: 14 | Box: Center (4.5, 0.5) | Next Center (4.5, 0.5) | Size (0.99, 0.99) | Type wall 
+[2024-12-16 13:53:49,491] INFO body_collision:399 > ID: 15 | Box: Center (4.5, 6.5) | Next Center (4.5, 6.5) | Size (0.99, 0.99) | Type wall 
+[2024-12-16 13:53:49,491] INFO body_collision:399 > ID: 16 | Box: Center (5.5, 0.5) | Next Center (5.5, 0.5) | Size (0.99, 0.99) | Type wall 
+[2024-12-16 13:53:49,491] INFO body_collision:399 > ID: 17 | Box: Center (5.5, 6.5) | Next Center (5.5, 6.5) | Size (0.99, 0.99) | Type wall 
+[2024-12-16 13:53:49,491] INFO body_collision:399 > ID: 18 | Box: Center (6.5, 0.5) | Next Center (6.5, 0.5) | Size (0.99, 0.99) | Type wall 
+[2024-12-16 13:53:49,491] INFO body_collision:399 > ID: 19 | Box: Center (6.5, 1.5) | Next Center (6.5, 1.5) | Size (0.99, 0.99) | Type wall 
+[2024-12-16 13:53:49,491] INFO body_collision:399 > ID: 20 | Box: Center (6.5, 2.5) | Next Center (6.5, 2.5) | Size (0.99, 0.99) | Type wall 
+[2024-12-16 13:53:49,491] INFO body_collision:399 > ID: 21 | Box: Center (6.5, 3.5) | Next Center (6.5, 3.5) | Size (0.99, 0.99) | Type wall 
+[2024-12-16 13:53:49,491] INFO body_collision:399 > ID: 22 | Box: Center (6.5, 4.5) | Next Center (6.5, 4.5) | Size (0.99, 0.99) | Type wall 
+[2024-12-16 13:53:49,491] INFO body_collision:399 > ID: 23 | Box: Center (6.5, 5.5) | Next Center (6.5, 5.5) | Size (0.99, 0.99) | Type wall 
+[2024-12-16 13:53:49,491] INFO body_collision:399 > ID: 24 | Box: Center (6.5, 6.5) | Next Center (6.5, 6.5) | Size (0.99, 0.99) | Type wall 
+[2024-12-16 13:53:49,492] INFO body_collision:399 > ID: 25 | Box: Center (1.5, 3.0) | Next Center (1.5, 3.0) | Size (0.99, 0.99) | Type pallet 
+[2024-12-16 13:53:49,492] INFO body_collision:399 > ID: 26 | Box: Center (2.5, 4.0) | Next Center (2.5, 4.0) | Size (0.99, 0.99) | Type pallet 
+[2024-12-16 13:53:49,492] INFO body_collision:399 > ID: 27 | Box: Center (3.5, 3.5) | Next Center (3.5, 3.5) | Size (0.99, 0.99) | Type pallet 
+[2024-12-16 13:53:49,492] INFO body_collision:399 > ID: 28 | Box: Center (2.5, 2.75) | Next Center (2.5, 2.75) | Size (0.99, 0.49) | Type robot 
+[2024-12-16 13:53:49,492] INFO map_of_symbols:145 > 
+should be:
+##############
+##...[].##..##
+##...@.[]...##
+##....[]....##
+##..........##
+##..........##
+##############
+25 and 26 indeed are half position, just as the robot is
+
+[2024-12-16 14:06:34,145] INFO day15-part2:341 > STEP:   11 | Command: (-1.0, 0) 
+[2024-12-16 14:06:34,145] DEBUG day15-part2:286 > Num Collisions: 1 | Collisions: [25] 
+[2024-12-16 14:06:34,146] DEBUG day15-part2:315 > collisions: [] 
+[2024-12-16 14:06:34,146] DEBUG day15-part2:322 > Boxes updated: 2 
+[2024-12-16 14:06:34,146] INFO day15-part2:255 > Map updated successfully from collision data 
+[2024-12-16 14:06:34,146] INFO map_of_symbols:145 > 
+Width: 7 | Height: 7
+# # # # # # # 
+# . O . # . # 
+# . @ . O . # 
+# . . O . . # 
+# . . . . . # 
+# . . . . . # 
+# # # # # # #  
+[2024-12-16 14:06:34,146] INFO day15-part2:332 > New Robot position: Center (2.5, 2.75) | Next Center (2.5, 2.75) | Size (0.99, 0.49) | Type robot 
+[2024-12-16 14:06:34,146] INFO day15-part2:362 > Found 29 boxes 
+[2024-12-16 14:06:34,146] DEBUG day15-part2:370 > Coordinate: (1.0, 2.5) | GPS: 105.0 | Total GPS: 105.0 
+[2024-12-16 14:06:34,146] DEBUG day15-part2:370 > Coordinate: (2.0, 3.5) | GPS: 207.0 | Total GPS: 312.0 
+[2024-12-16 14:06:34,146] DEBUG day15-part2:370 > Coordinate: (3.0, 3.0) | GPS: 306.0 | Total GPS: 618.0 
+[2024-12-16 14:06:34,147] INFO day15-part2:372 > Sum of all GPS coordinates: 618.0 
+
+TOP coordinate is coorect!!
+
+______________________________________________________________________________
+
+    MEDIUM EXAMPLE: SUCCESS!!!
+
+In the scaled-up version of the larger example from above, after the robot has finished all of its moves, the warehouse would look like this:
+
+####################
+##[].......[].[][]##
+##[]...........[].##
+##[]........[][][]##
+##[]......[]....[]##
+##..##......[]....##
+##..[]............##
+##..@......[].[][]##
+##......[][]..[]..##
+####################
+
+The sum of these boxes' GPS coordinates is 9021.
 
 
+[2024-12-16 14:07:14,100] INFO day15-part2:341 > STEP:  700 | Command: (-1.0, 0) 
+[2024-12-16 14:07:14,100] DEBUG day15-part2:286 > Num Collisions: 1 | Collisions: [50] 
+[2024-12-16 14:07:14,102] DEBUG day15-part2:315 > collisions: [19, 50] 
+[2024-12-16 14:07:14,103] DEBUG day15-part2:304 > WALL. Forbidden from moving 
+[2024-12-16 14:07:14,103] DEBUG day15-part2:325 > Boxes whose update has been discarded: 2 
+[2024-12-16 14:07:14,103] INFO day15-part2:255 > Map updated successfully from collision data 
+[2024-12-16 14:07:14,103] INFO map_of_symbols:145 > 
+Width: 10 | Height: 10
+# # # # # # # # # # 
+# O . . . . O O O # 
+# O . . . . . . O # 
+# O . . . . O O O # 
+# O . . . O . . O # 
+# . # . . . O . . # 
+# . O . . . . . . # 
+# . @ . . . O O O # 
+# . . . O O . O . # 
+# # # # # # # # # #  
+[2024-12-16 14:07:14,103] INFO day15-part2:332 > New Robot position: Center (7.5, 2.25) | Next Center (7.5, 2.25) | Size (0.99, 0.49) | Type robot 
+[2024-12-16 14:07:14,103] INFO day15-part2:362 > Found 59 boxes 
+[2024-12-16 14:07:14,103] DEBUG day15-part2:370 > Coordinate: (1.0, 5.5) | GPS: 111.0 | Total GPS: 111.0 
+[2024-12-16 14:07:14,103] DEBUG day15-part2:370 > Coordinate: (1.0, 7.0) | GPS: 114.0 | Total GPS: 225.0 
+[2024-12-16 14:07:14,103] DEBUG day15-part2:370 > Coordinate: (1.0, 8.0) | GPS: 116.0 | Total GPS: 341.0 
+[2024-12-16 14:07:14,103] DEBUG day15-part2:370 > Coordinate: (2.0, 7.5) | GPS: 215.0 | Total GPS: 556.0 
+[2024-12-16 14:07:14,103] DEBUG day15-part2:370 > Coordinate: (5.0, 6.0) | GPS: 512.0 | Total GPS: 1068.0 
+[2024-12-16 14:07:14,103] DEBUG day15-part2:370 > Coordinate: (3.0, 6.0) | GPS: 312.0 | Total GPS: 1380.0 
+[2024-12-16 14:07:14,103] DEBUG day15-part2:370 > Coordinate: (3.0, 7.0) | GPS: 314.0 | Total GPS: 1694.0 
+[2024-12-16 14:07:14,103] DEBUG day15-part2:370 > Coordinate: (3.0, 8.0) | GPS: 316.0 | Total GPS: 2010.0 
+[2024-12-16 14:07:14,103] DEBUG day15-part2:370 > Coordinate: (3.0, 1.0) | GPS: 302.0 | Total GPS: 2312.0 
+[2024-12-16 14:07:14,103] DEBUG day15-part2:370 > Coordinate: (4.0, 8.0) | GPS: 416.0 | Total GPS: 2728.0 
+[2024-12-16 14:07:14,103] DEBUG day15-part2:370 > Coordinate: (1.0, 1.0) | GPS: 102.0 | Total GPS: 2830.0 
+[2024-12-16 14:07:14,103] DEBUG day15-part2:370 > Coordinate: (4.0, 5.0) | GPS: 410.0 | Total GPS: 3240.0 
+[2024-12-16 14:07:14,103] DEBUG day15-part2:370 > Coordinate: (2.0, 1.0) | GPS: 202.0 | Total GPS: 3442.0 
+[2024-12-16 14:07:14,104] DEBUG day15-part2:370 > Coordinate: (6.0, 2.0) | GPS: 604.0 | Total GPS: 4046.0 
+[2024-12-16 14:07:14,104] DEBUG day15-part2:370 > Coordinate: (7.0, 7.0) | GPS: 714.0 | Total GPS: 4760.0 
+[2024-12-16 14:07:14,104] DEBUG day15-part2:370 > Coordinate: (4.0, 1.0) | GPS: 402.0 | Total GPS: 5162.0 
+[2024-12-16 14:07:14,104] DEBUG day15-part2:370 > Coordinate: (8.0, 4.0) | GPS: 808.0 | Total GPS: 5970.0 
+[2024-12-16 14:07:14,104] DEBUG day15-part2:370 > Coordinate: (7.0, 5.5) | GPS: 711.0 | Total GPS: 6681.0 
+[2024-12-16 14:07:14,104] DEBUG day15-part2:370 > Coordinate: (8.0, 7.0) | GPS: 814.0 | Total GPS: 7495.0 
+[2024-12-16 14:07:14,104] DEBUG day15-part2:370 > Coordinate: (7.0, 8.0) | GPS: 716.0 | Total GPS: 8211.0 
+[2024-12-16 14:07:14,104] DEBUG day15-part2:370 > Coordinate: (8.0, 5.0) | GPS: 810.0 | Total GPS: 9021.0 
+[2024-12-16 14:07:14,104] INFO day15-part2:372 > Sum of all GPS coordinates: 9021.0 
 
+______________________________________________________________________________
+
+very very slow. 
+[2024-12-16 14:10:59,455] INFO day15-part2:348 > STEP:    1 | Command: (0, 0.5) 
+[2024-12-16 14:12:56,226] INFO day15-part2:348 > STEP:  608 | Command: (1.0, 0) 
+2 minutes for 600 steps on 20000 means 66minutes to finished
+I guess is the collision detection that is too expensive
+
+I can do better.
+restrict the detection to the new items moved
+
+working
+[2024-12-16 14:27:36,408] INFO day15-part2:369 > STEP:    1 | Command: (0, -0.5) 
+[2024-12-16 14:27:36,408] INFO body_collision:393 > Apply: 2 | ID: [45, 58] 
+[2024-12-16 14:27:36,408] INFO day15-part2:359 > New Robot position: Center (4.5, 3.75) | Next Center (4.5, 3.75) | Size (0.99, 0.49) | Type robot 
+[2024-12-16 14:27:36,408] INFO day15-part2:369 > STEP:    2 | Command: (1.0, 0) 
+[2024-12-16 14:27:36,409] INFO body_collision:393 > Apply: 1 | ID: [58] 
+[2024-12-16 14:27:36,409] INFO day15-part2:359 > New Robot position: Center (5.5, 3.75) | Next Center (5.5, 3.75) | Size (0.99, 0.49) | Type robot 
+[2024-12-16 14:27:36,409] INFO day15-part2:369 > STEP:    3 | Command: (1.0, 0) 
+[2024-12-16 14:27:36,409] INFO body_collision:393 > Apply: 1 | ID: [58] 
+[2024-12-16 14:27:36,409] INFO day15-part2:359 > New Robot position: Center (6.5, 3.75) | Next Center (6.5, 3.75) | Size (0.99, 0.49) | Type robot 
+[2024-12-16 14:27:36,409] INFO day15-part2:369 > STEP:    4 | Command: (0, 0.5) 
+[2024-12-16 14:27:36,410] INFO body_collision:393 > Apply: 2 | ID: [50, 58] 
+[2024-12-16 14:27:36,410] INFO day15-part2:359 > New Robot position: Center (6.5, 4.25) | Next Center (6.5, 4.25) | Size (0.99, 0.49) | Type robot 
+[2024-12-16 14:27:36,410] INFO day15-part2:369 > STEP:    5 | Command: (-1.0, 0) 
+[2024-12-16 14:27:36,410] INFO body_collision:393 > Apply: 1 | ID: [58] 
+[2024-12-16 14:27:36,410] INFO day15-part2:359 > New Robot position: Center (5.5, 4.25) | Next Center (5.5, 4.25) | Size (0.99, 0.49) | Type robot 
+[2024-12-16 14:27:36,411] INFO day15-part2:369 > STEP:    6 | Command: (0, -0.5) 
+[2024-12-16 14:27:36,411] INFO body_collision:393 > Apply: 1 | ID: [58] 
+[2024-12-16 14:27:36,411] INFO day15-part2:359 > New Robot position: Center (5.5, 3.75) | Next Center (5.5, 3.75) | Size (0.99, 0.49) | Type robot 
+[2024-12-16 14:27:36,411] INFO day15-part2:369 > STEP:    7 | Command: (1.0, 0) 
+[2024-12-16 14:27:36,411] INFO body_collision:393 > Apply: 1 | ID: [58] 
+[2024-12-16 14:27:36,411] INFO day15-part2:359 > New Robot position: Center (6.5, 3.75) | Next Center (6.5, 3.75) | Size (0.99, 0.49) | Type robot 
+[2024-12-16 14:27:36,412] INFO day15-part2:369 > STEP:    8 | Command: (-1.0, 0) 
+[2024-12-16 14:27:36,412] INFO body_collision:393 > Apply: 1 | ID: [58] 
+[2024-12-16 14:27:36,412] INFO day15-part2:359 > New Robot position: Center (5.5, 3.75) | Next Center (5.5, 3.75) | Size (0.99, 0.49) | Type robot 
+[2024-12-16 14:27:36,412] INFO day15-part2:369 > STEP:    9 | Command: (0, 0.5) 
+[2024-12-16 14:27:36,412] INFO body_collision:393 > Apply: 1 | ID: [58] 
+[2024-12-16 14:27:36,412] INFO day15-part2:359 > New Robot position: Center (5.5, 4.25) | Next Center (5.5, 4.25) | Size (0.99, 0.49) | Type robot 
+[2024-12-16 14:27:36,412] INFO day15-part2:369 > STEP:   10 | Command: (1.0, 0) 
+[2024-12-16 14:27:36,413] INFO body_collision:393 > Apply: 1 | ID: [58] 
+[2024-12-16 14:27:36,413] INFO day15-part2:359 > New Robot position: Center (6.5, 4.25) | Next Center (6.5, 4.25) | Size (0.99, 0.49) | Type robot 
+[2024-12-16 14:27:36,413] INFO day15-part2:369 > STEP:   11 | Command: (0, 0.5) 
+[2024-12-16 14:27:36,413] INFO body_collision:393 > Apply: 2 | ID: [50, 58] 
+
+fast collision detection
+[2024-12-16 14:28:10,286] INFO day15-part2:369 > STEP:    1 | Command: (0, -0.5) 
+[2024-12-16 14:28:10,294] INFO body_collision:393 > Apply: 2 | ID: [45, 58] 
+[2024-12-16 14:28:10,294] INFO day15-part2:359 > New Robot position: Center (4.5, 3.75) | Next Center (4.5, 3.75) | Size (0.99, 0.49) | Type robot 
+[2024-12-16 14:28:10,294] INFO day15-part2:369 > STEP:    2 | Command: (1.0, 0) 
+[2024-12-16 14:28:10,295] INFO body_collision:393 > Apply: 1 | ID: [58] 
+[2024-12-16 14:28:10,295] INFO day15-part2:359 > New Robot position: Center (5.5, 3.75) | Next Center (5.5, 3.75) | Size (0.99, 0.49) | Type robot 
+[2024-12-16 14:28:10,295] INFO day15-part2:369 > STEP:    3 | Command: (1.0, 0) 
+[2024-12-16 14:28:10,295] INFO body_collision:393 > Apply: 1 | ID: [58] 
+[2024-12-16 14:28:10,296] INFO day15-part2:359 > New Robot position: Center (6.5, 3.75) | Next Center (6.5, 3.75) | Size (0.99, 0.49) | Type robot 
+[2024-12-16 14:28:10,296] INFO day15-part2:369 > STEP:    4 | Command: (0, 0.5) 
+[2024-12-16 14:28:10,301] INFO body_collision:393 > Apply: 2 | ID: [50, 58] 
+[2024-12-16 14:28:10,301] INFO day15-part2:359 > New Robot position: Center (6.5, 4.25) | Next Center (6.5, 4.25) | Size (0.99, 0.49) | Type robot 
+[2024-12-16 14:28:10,302] INFO day15-part2:369 > STEP:    5 | Command: (-1.0, 0) 
+[2024-12-16 14:28:10,302] INFO body_collision:393 > Apply: 1 | ID: [58] 
+[2024-12-16 14:28:10,302] INFO day15-part2:359 > New Robot position: Center (5.5, 4.25) | Next Center (5.5, 4.25) | Size (0.99, 0.49) | Type robot 
+[2024-12-16 14:28:10,303] INFO day15-part2:369 > STEP:    6 | Command: (0, -0.5) 
+[2024-12-16 14:28:10,303] INFO body_collision:393 > Apply: 1 | ID: [58] 
+[2024-12-16 14:28:10,303] INFO day15-part2:359 > New Robot position: Center (5.5, 3.75) | Next Center (5.5, 3.75) | Size (0.99, 0.49) | Type robot 
+[2024-12-16 14:28:10,303] INFO day15-part2:369 > STEP:    7 | Command: (1.0, 0) 
+[2024-12-16 14:28:10,304] INFO body_collision:393 > Apply: 1 | ID: [58] 
+[2024-12-16 14:28:10,304] INFO day15-part2:359 > New Robot position: Center (6.5, 3.75) | Next Center (6.5, 3.75) | Size (0.99, 0.49) | Type robot 
+[2024-12-16 14:28:10,305] INFO day15-part2:369 > STEP:    8 | Command: (-1.0, 0) 
+[2024-12-16 14:28:10,305] INFO body_collision:393 > Apply: 1 | ID: [58] 
+[2024-12-16 14:28:10,305] INFO day15-part2:359 > New Robot position: Center (5.5, 3.75) | Next Center (5.5, 3.75) | Size (0.99, 0.49) | Type robot 
+[2024-12-16 14:28:10,305] INFO day15-part2:369 > STEP:    9 | Command: (0, 0.5) 
+[2024-12-16 14:28:10,306] INFO body_collision:393 > Apply: 1 | ID: [58] 
+[2024-12-16 14:28:10,306] INFO day15-part2:359 > New Robot position: Center (5.5, 4.25) | Next Center (5.5, 4.25) | Size (0.99, 0.49) | Type robot 
+[2024-12-16 14:28:10,306] INFO day15-part2:369 > STEP:   10 | Command: (1.0, 0) 
+[2024-12-16 14:28:10,306] INFO body_collision:393 > Apply: 1 | ID: [58] 
+[2024-12-16 14:28:10,307] INFO day15-part2:359 > New Robot position: Center (6.5, 4.25) | Next Center (6.5, 4.25) | Size (0.99, 0.49) | Type robot 
+[2024-12-16 14:28:10,307] INFO day15-part2:369 > STEP:   11 | Command: (0, 0.5) 
+[2024-12-16 14:28:10,311] INFO body_collision:393 > Apply: 2 | ID: [50, 58]
+
+
+SLOW STEP 18
+[2024-12-16 14:34:08,780] INFO day15-part2:369 > STEP:   18 | Command: (1.0, 0) 
+[2024-12-16 14:34:08,781] DEBUG day15-part2:289 > Num Collisions: 1 | Collisions: [57] 
+[2024-12-16 14:34:08,785] DEBUG day15-part2:339 > collisions: [32, 57] 
+[2024-12-16 14:34:08,786] DEBUG day15-part2:308 > WALL. Forbidden from moving 
+[2024-12-16 14:34:08,787] INFO body_collision:408 > Discard: 2 | ID: [57, 58] 
+[2024-12-16 14:34:08,788] DEBUG day15-part2:351 > Boxes whose update has been discarded: 2 
+[2024-12-16 14:34:08,788] INFO day15-part2:257 > Map updated successfully from collision data 
+[2024-12-16 14:34:08,789] INFO map_of_symbols:145 > 
+Width: 10 | Height: 10
+# # # # # # # # # # 
+# . . O . . O . O # 
+# . . . . . . O . # 
+# . O O . . O . O # 
+# . O . . . . O . # 
+# O # . . O . . . # 
+# O . . . O . O . # 
+# . O O . @ O O O # 
+# . . . . O . . . # 
+# # # # # # # # # #  
+
+FAST STEP 18
+[2024-12-16 14:35:05,181] INFO day15-part2:359 > New Robot position: Center (7.5, 5.25) | Next Center (7.5, 5.25) | Size (0.99, 0.49) | Type robot 
+[2024-12-16 14:35:05,181] INFO day15-part2:369 > STEP:   18 | Command: (1.0, 0) 
+[2024-12-16 14:35:05,182] DEBUG day15-part2:289 > Num Collisions: 1 | Collisions: [57] 
+[2024-12-16 14:35:05,182] DEBUG day15-part2:339 > collisions: [] 
+[2024-12-16 14:35:05,182] INFO body_collision:393 > Apply: 2 | ID: [57, 58] 
+[2024-12-16 14:35:05,183] DEBUG day15-part2:347 > Boxes updated: 2 
+[2024-12-16 14:35:05,183] INFO day15-part2:257 > Map updated successfully from collision data 
+[2024-12-16 14:35:05,183] INFO map_of_symbols:145 > 
+Width: 10 | Height: 10
+# # # # # # # # # # 
+# . . O . . O . O # 
+# . . . . . . O . # 
+# . O O . . O . O # 
+# . O . . . . O . # 
+# O # . . O . . . # 
+# O . . . O . O . # 
+# . O O . . O O O # 
+# . . . . @ . . . # 
+# # # # # O # # # # 
+
+it's clear it failed to detect a wall collision
