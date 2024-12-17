@@ -81,3 +81,11 @@ In this maze, the best paths cost 11048 points; following one such path would lo
 Note that the path shown above includes one 90 degree turn as the very first move, rotating the Reindeer from facing East to facing North.
 
 Analyze your map carefully. What is the lowest score a Reindeer could possibly get?
+
+
+_____________________________________________________________________________
+
+PART1 ALGORITHM
+
+This seems easy?
+It's a coloring algorithm where I paint a tile with the score, and I keep only if I paint a lower score than present
