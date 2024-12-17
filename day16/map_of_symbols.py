@@ -20,6 +20,7 @@ class Map_of_symbols:
         self.gn_width: int = 0
         self.glln_map: List[List[str]] = list()
         self.gtnn_cursor: Tuple[int, int] = (0, 0)  # Iterator cursor
+        self.gn_show_spacing : int = 2
 
     def __iter__(self):
         """
@@ -97,7 +98,11 @@ class Map_of_symbols:
         logging.info(f"Loaded map size H: {self.gn_height} W: {self.gn_width}")
         return False  # OK
 
-    def get_map_string(self, illtnn_symbol: List[List[Tuple[int, int]]] = None) -> Tuple[bool, List[str]]:
+    def set_show_spacing( self, in_spacing : int ) -> bool:
+        self.gn_show_spacing = in_spacing
+        return False #OK
+
+    def get_map_string(self, illtnn_symbol: List[List[Tuple[int, int]]]) -> Tuple[bool, List[str]]:
         """
         Generates a string representation of the map.
 
@@ -117,7 +122,16 @@ class Map_of_symbols:
                 if b_fail:
                     logging.error(f"ERROR: Failed to get symbol at coordinate {tnn_coordinate}")
                     return True, []
-                line += f"{s_symbol:2}"
+                try:
+                    s_spacing = f"{self.gn_show_spacing }"
+                    format_spec = f"{{:>{s_spacing}}}"
+                    line += format_spec.format(s_symbol)
+                    #s_spacing = f"{in_spacing}"
+                    #line += f"{s_symbol:s_spacing}"
+                except Exception as e:
+                    logging.error(f"Symbol: {s_symbol} | Spacing: {s_spacing} {type(s_spacing)}| {e} ")
+                    return True, list()
+
             s_map.append(line)
         return False, s_map  # OK
 
@@ -206,6 +220,7 @@ class Map_of_symbols:
         """
         Given a position
         Returns all four connect position that are within boundaries
+        It's ordered in N, E, S, W clockwise fron North
         """
 
         if self.is_coordinate_invalid( itnn_start ):
@@ -213,12 +228,40 @@ class Map_of_symbols:
 
         ltnn_four_connect: List[Tuple[int, int]] = list()
         (n_y, n_x) = itnn_start
-        ltnn_test = [(n_y + dy, n_x) for dy in [-1, 1]] + [(n_y, n_x + dx) for dx in [-1, 1]]
-        for tnn_test in ltnn_test:
+        
+        ltnn_delta = [(-1,0), (0,1), (1,0), (0,-1)]
+
+        for tnn_delta in ltnn_delta:
+            tnn_test = (n_x+tnn_delta[0], n_y+tnn_delta[1])
             if self.is_coordinate_invalid(tnn_test):
                 pass
             else:
                 ltnn_four_connect.append(tnn_test)
+        return ltnn_four_connect
+    
+    def get_four_connect_direction(self, itnn_start: Tuple[int, int]) -> List[Tuple[int, int, int]]:
+        """
+        Given a position
+        Returns all four connect position that are within boundaries
+        It's ordered in N=0, E=1, S=2, W=3 clockwise fron North
+        RETURNS
+        X,Y,D
+        """
+
+        if self.is_coordinate_invalid( itnn_start ):
+            return list()
+
+        ltnn_four_connect: List[Tuple[int, int]] = list()
+        (n_y, n_x) = itnn_start
+        
+        ltnn_delta = [(-1,0), (0,1), (1,0), (0,-1)]
+
+        for n_dir, tnn_delta in enumerate(ltnn_delta):
+            tnn_test = (n_y+tnn_delta[0], n_x+tnn_delta[1])
+            if self.is_coordinate_invalid(tnn_test):
+                pass
+            else:
+                ltnn_four_connect.append((tnn_test[0], tnn_test[1], n_dir))
         return ltnn_four_connect
 
     def find_four_connect(self, itnn_start: Tuple[int, int], is_symbol: str) -> Tuple[bool, List[Tuple[int, int]]]:
