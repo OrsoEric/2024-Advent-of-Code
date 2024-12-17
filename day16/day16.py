@@ -413,7 +413,7 @@ def solution2() -> bool:
     #s_filename_labirinth = "day16/day16-example-17x17.txt"
     #s_filename_labirinth = "day16/day16-example-30x30.txt"
     #s_filename_labirinth = "day16/day16-example-60x60.txt"
-    s_filename_labirinth = "day16/day16-data-100x100.txt"
+    s_filename_labirinth = "day16/day16-data-141x141.txt"
 
     #b_fail = cl_labirinth.load_from_file("day16/day16-example-15x15.txt")
     #b_fail = cl_labirinth.load_from_file("day16/day16-example-17x17.txt")

@@ -1,0 +1,236 @@
+[2024-12-17 19:35:40,756] INFO day17:236 > Begin 
+[2024-12-17 19:35:40,756] DEBUG day17:92 > STATE: PC: 0 | REG A: 35200350 | REG B: 0 | REG C: 0 | OUTPUT [] 
+[2024-12-17 19:35:40,756] DEBUG day17:93 > Instruction 2 | Argument Code 4 | Argument 35200350 
+[2024-12-17 19:35:40,756] INFO day17:136 > B-MOD | B 6 = 35200350 MOD 8 
+[2024-12-17 19:35:40,756] DEBUG day17:92 > STATE: PC: 2 | REG A: 35200350 | REG B: 6 | REG C: 0 | OUTPUT [] 
+[2024-12-17 19:35:40,756] DEBUG day17:93 > Instruction 1 | Argument Code 2 | Argument 2 
+[2024-12-17 19:35:40,756] DEBUG day17:130 > B-XOR | B 4 = B 6 ^ 2 
+[2024-12-17 19:35:40,756] DEBUG day17:92 > STATE: PC: 4 | REG A: 35200350 | REG B: 4 | REG C: 0 | OUTPUT [] 
+[2024-12-17 19:35:40,756] DEBUG day17:93 > Instruction 7 | Argument Code 5 | Argument 4 
+[2024-12-17 19:35:40,756] INFO day17:174 > C-DIV | C 2200021 = A 35200350 / 16 
+[2024-12-17 19:35:40,756] ERROR day17:59 > ERROR: invalid argument code 7 
+[2024-12-17 19:35:40,756] DEBUG day17:90 > Invalid argument but instruction 4 doesn't use arguments 
+[2024-12-17 19:35:40,756] DEBUG day17:92 > STATE: PC: 6 | REG A: 35200350 | REG B: 4 | REG C: 2200021 | OUTPUT [] 
+[2024-12-17 19:35:40,756] DEBUG day17:93 > Instruction 4 | Argument Code 7 | Argument -1 
+[2024-12-17 19:35:40,756] DEBUG day17:154 > B-XOR | B 2200017 = B 4 ^ C 2200021 
+[2024-12-17 19:35:40,756] DEBUG day17:92 > STATE: PC: 8 | REG A: 35200350 | REG B: 2200017 | REG C: 2200021 | OUTPUT [] 
+[2024-12-17 19:35:40,756] DEBUG day17:93 > Instruction 1 | Argument Code 3 | Argument 3 
+[2024-12-17 19:35:40,756] DEBUG day17:130 > B-XOR | B 2200018 = B 2200017 ^ 3 
+[2024-12-17 19:35:40,756] DEBUG day17:92 > STATE: PC: 10 | REG A: 35200350 | REG B: 2200018 | REG C: 2200021 | OUTPUT [] 
+[2024-12-17 19:35:40,756] DEBUG day17:93 > Instruction 5 | Argument Code 5 | Argument 2200018 
+[2024-12-17 19:35:40,756] DEBUG day17:159 > PRINT 2 
+[2024-12-17 19:35:40,756] DEBUG day17:92 > STATE: PC: 12 | REG A: 35200350 | REG B: 2200018 | REG C: 2200021 | OUTPUT [2] 
+[2024-12-17 19:35:40,756] DEBUG day17:93 > Instruction 0 | Argument Code 3 | Argument 3 
+[2024-12-17 19:35:40,756] INFO day17:120 > A-DIV | A 4400043 = A 35200350 / 8 
+[2024-12-17 19:35:40,756] DEBUG day17:92 > STATE: PC: 14 | REG A: 4400043 | REG B: 2200018 | REG C: 2200021 | OUTPUT [2] 
+[2024-12-17 19:35:40,756] DEBUG day17:93 > Instruction 3 | Argument Code 0 | Argument 0 
+[2024-12-17 19:35:40,756] INFO day17:145 > JUMP | 0 
+[2024-12-17 19:35:40,756] DEBUG day17:92 > STATE: PC: 0 | REG A: 4400043 | REG B: 2200018 | REG C: 2200021 | OUTPUT [2] 
+[2024-12-17 19:35:40,756] DEBUG day17:93 > Instruction 2 | Argument Code 4 | Argument 4400043 
+[2024-12-17 19:35:40,756] INFO day17:136 > B-MOD | B 3 = 4400043 MOD 8 
+[2024-12-17 19:35:40,756] DEBUG day17:92 > STATE: PC: 2 | REG A: 4400043 | REG B: 3 | REG C: 2200021 | OUTPUT [2] 
+[2024-12-17 19:35:40,756] DEBUG day17:93 > Instruction 1 | Argument Code 2 | Argument 2 
+[2024-12-17 19:35:40,756] DEBUG day17:130 > B-XOR | B 1 = B 3 ^ 2 
+[2024-12-17 19:35:40,756] DEBUG day17:92 > STATE: PC: 4 | REG A: 4400043 | REG B: 1 | REG C: 2200021 | OUTPUT [2] 
+[2024-12-17 19:35:40,756] DEBUG day17:93 > Instruction 7 | Argument Code 5 | Argument 1 
+[2024-12-17 19:35:40,756] INFO day17:174 > C-DIV | C 2200021 = A 4400043 / 2 
+[2024-12-17 19:35:40,756] ERROR day17:59 > ERROR: invalid argument code 7 
+[2024-12-17 19:35:40,756] DEBUG day17:90 > Invalid argument but instruction 4 doesn't use arguments 
+[2024-12-17 19:35:40,756] DEBUG day17:92 > STATE: PC: 6 | REG A: 4400043 | REG B: 1 | REG C: 2200021 | OUTPUT [2] 
+[2024-12-17 19:35:40,756] DEBUG day17:93 > Instruction 4 | Argument Code 7 | Argument -1 
+[2024-12-17 19:35:40,756] DEBUG day17:154 > B-XOR | B 2200020 = B 1 ^ C 2200021 
+[2024-12-17 19:35:40,756] DEBUG day17:92 > STATE: PC: 8 | REG A: 4400043 | REG B: 2200020 | REG C: 2200021 | OUTPUT [2] 
+[2024-12-17 19:35:40,756] DEBUG day17:93 > Instruction 1 | Argument Code 3 | Argument 3 
+[2024-12-17 19:35:40,756] DEBUG day17:130 > B-XOR | B 2200023 = B 2200020 ^ 3 
+[2024-12-17 19:35:40,756] DEBUG day17:92 > STATE: PC: 10 | REG A: 4400043 | REG B: 2200023 | REG C: 2200021 | OUTPUT [2] 
+[2024-12-17 19:35:40,756] DEBUG day17:93 > Instruction 5 | Argument Code 5 | Argument 2200023 
+[2024-12-17 19:35:40,756] DEBUG day17:159 > PRINT 7 
+[2024-12-17 19:35:40,756] DEBUG day17:92 > STATE: PC: 12 | REG A: 4400043 | REG B: 2200023 | REG C: 2200021 | OUTPUT [2, 7] 
+[2024-12-17 19:35:40,756] DEBUG day17:93 > Instruction 0 | Argument Code 3 | Argument 3 
+[2024-12-17 19:35:40,756] INFO day17:120 > A-DIV | A 550005 = A 4400043 / 8 
+[2024-12-17 19:35:40,756] DEBUG day17:92 > STATE: PC: 14 | REG A: 550005 | REG B: 2200023 | REG C: 2200021 | OUTPUT [2, 7] 
+[2024-12-17 19:35:40,756] DEBUG day17:93 > Instruction 3 | Argument Code 0 | Argument 0 
+[2024-12-17 19:35:40,756] INFO day17:145 > JUMP | 0 
+[2024-12-17 19:35:40,756] DEBUG day17:92 > STATE: PC: 0 | REG A: 550005 | REG B: 2200023 | REG C: 2200021 | OUTPUT [2, 7] 
+[2024-12-17 19:35:40,756] DEBUG day17:93 > Instruction 2 | Argument Code 4 | Argument 550005 
+[2024-12-17 19:35:40,756] INFO day17:136 > B-MOD | B 5 = 550005 MOD 8 
+[2024-12-17 19:35:40,756] DEBUG day17:92 > STATE: PC: 2 | REG A: 550005 | REG B: 5 | REG C: 2200021 | OUTPUT [2, 7] 
+[2024-12-17 19:35:40,756] DEBUG day17:93 > Instruction 1 | Argument Code 2 | Argument 2 
+[2024-12-17 19:35:40,756] DEBUG day17:130 > B-XOR | B 7 = B 5 ^ 2 
+[2024-12-17 19:35:40,756] DEBUG day17:92 > STATE: PC: 4 | REG A: 550005 | REG B: 7 | REG C: 2200021 | OUTPUT [2, 7] 
+[2024-12-17 19:35:40,756] DEBUG day17:93 > Instruction 7 | Argument Code 5 | Argument 7 
+[2024-12-17 19:35:40,756] INFO day17:174 > C-DIV | C 4296 = A 550005 / 128 
+[2024-12-17 19:35:40,756] ERROR day17:59 > ERROR: invalid argument code 7 
+[2024-12-17 19:35:40,756] DEBUG day17:90 > Invalid argument but instruction 4 doesn't use arguments 
+[2024-12-17 19:35:40,756] DEBUG day17:92 > STATE: PC: 6 | REG A: 550005 | REG B: 7 | REG C: 4296 | OUTPUT [2, 7] 
+[2024-12-17 19:35:40,756] DEBUG day17:93 > Instruction 4 | Argument Code 7 | Argument -1 
+[2024-12-17 19:35:40,756] DEBUG day17:154 > B-XOR | B 4303 = B 7 ^ C 4296 
+[2024-12-17 19:35:40,756] DEBUG day17:92 > STATE: PC: 8 | REG A: 550005 | REG B: 4303 | REG C: 4296 | OUTPUT [2, 7] 
+[2024-12-17 19:35:40,756] DEBUG day17:93 > Instruction 1 | Argument Code 3 | Argument 3 
+[2024-12-17 19:35:40,756] DEBUG day17:130 > B-XOR | B 4300 = B 4303 ^ 3 
+[2024-12-17 19:35:40,756] DEBUG day17:92 > STATE: PC: 10 | REG A: 550005 | REG B: 4300 | REG C: 4296 | OUTPUT [2, 7] 
+[2024-12-17 19:35:40,756] DEBUG day17:93 > Instruction 5 | Argument Code 5 | Argument 4300 
+[2024-12-17 19:35:40,756] DEBUG day17:159 > PRINT 4 
+[2024-12-17 19:35:40,756] DEBUG day17:92 > STATE: PC: 12 | REG A: 550005 | REG B: 4300 | REG C: 4296 | OUTPUT [2, 7, 4] 
+[2024-12-17 19:35:40,756] DEBUG day17:93 > Instruction 0 | Argument Code 3 | Argument 3 
+[2024-12-17 19:35:40,756] INFO day17:120 > A-DIV | A 68750 = A 550005 / 8 
+[2024-12-17 19:35:40,756] DEBUG day17:92 > STATE: PC: 14 | REG A: 68750 | REG B: 4300 | REG C: 4296 | OUTPUT [2, 7, 4] 
+[2024-12-17 19:35:40,756] DEBUG day17:93 > Instruction 3 | Argument Code 0 | Argument 0 
+[2024-12-17 19:35:40,756] INFO day17:145 > JUMP | 0 
+[2024-12-17 19:35:40,756] DEBUG day17:92 > STATE: PC: 0 | REG A: 68750 | REG B: 4300 | REG C: 4296 | OUTPUT [2, 7, 4] 
+[2024-12-17 19:35:40,756] DEBUG day17:93 > Instruction 2 | Argument Code 4 | Argument 68750 
+[2024-12-17 19:35:40,756] INFO day17:136 > B-MOD | B 6 = 68750 MOD 8 
+[2024-12-17 19:35:40,756] DEBUG day17:92 > STATE: PC: 2 | REG A: 68750 | REG B: 6 | REG C: 4296 | OUTPUT [2, 7, 4] 
+[2024-12-17 19:35:40,756] DEBUG day17:93 > Instruction 1 | Argument Code 2 | Argument 2 
+[2024-12-17 19:35:40,756] DEBUG day17:130 > B-XOR | B 4 = B 6 ^ 2 
+[2024-12-17 19:35:40,756] DEBUG day17:92 > STATE: PC: 4 | REG A: 68750 | REG B: 4 | REG C: 4296 | OUTPUT [2, 7, 4] 
+[2024-12-17 19:35:40,756] DEBUG day17:93 > Instruction 7 | Argument Code 5 | Argument 4 
+[2024-12-17 19:35:40,756] INFO day17:174 > C-DIV | C 4296 = A 68750 / 16 
+[2024-12-17 19:35:40,756] ERROR day17:59 > ERROR: invalid argument code 7 
+[2024-12-17 19:35:40,756] DEBUG day17:90 > Invalid argument but instruction 4 doesn't use arguments 
+[2024-12-17 19:35:40,756] DEBUG day17:92 > STATE: PC: 6 | REG A: 68750 | REG B: 4 | REG C: 4296 | OUTPUT [2, 7, 4] 
+[2024-12-17 19:35:40,756] DEBUG day17:93 > Instruction 4 | Argument Code 7 | Argument -1 
+[2024-12-17 19:35:40,756] DEBUG day17:154 > B-XOR | B 4300 = B 4 ^ C 4296 
+[2024-12-17 19:35:40,756] DEBUG day17:92 > STATE: PC: 8 | REG A: 68750 | REG B: 4300 | REG C: 4296 | OUTPUT [2, 7, 4] 
+[2024-12-17 19:35:40,756] DEBUG day17:93 > Instruction 1 | Argument Code 3 | Argument 3 
+[2024-12-17 19:35:40,756] DEBUG day17:130 > B-XOR | B 4303 = B 4300 ^ 3 
+[2024-12-17 19:35:40,756] DEBUG day17:92 > STATE: PC: 10 | REG A: 68750 | REG B: 4303 | REG C: 4296 | OUTPUT [2, 7, 4] 
+[2024-12-17 19:35:40,756] DEBUG day17:93 > Instruction 5 | Argument Code 5 | Argument 4303 
+[2024-12-17 19:35:40,756] DEBUG day17:159 > PRINT 7 
+[2024-12-17 19:35:40,756] DEBUG day17:92 > STATE: PC: 12 | REG A: 68750 | REG B: 4303 | REG C: 4296 | OUTPUT [2, 7, 4, 7] 
+[2024-12-17 19:35:40,756] DEBUG day17:93 > Instruction 0 | Argument Code 3 | Argument 3 
+[2024-12-17 19:35:40,756] INFO day17:120 > A-DIV | A 8593 = A 68750 / 8 
+[2024-12-17 19:35:40,756] DEBUG day17:92 > STATE: PC: 14 | REG A: 8593 | REG B: 4303 | REG C: 4296 | OUTPUT [2, 7, 4, 7] 
+[2024-12-17 19:35:40,756] DEBUG day17:93 > Instruction 3 | Argument Code 0 | Argument 0 
+[2024-12-17 19:35:40,756] INFO day17:145 > JUMP | 0 
+[2024-12-17 19:35:40,756] DEBUG day17:92 > STATE: PC: 0 | REG A: 8593 | REG B: 4303 | REG C: 4296 | OUTPUT [2, 7, 4, 7] 
+[2024-12-17 19:35:40,756] DEBUG day17:93 > Instruction 2 | Argument Code 4 | Argument 8593 
+[2024-12-17 19:35:40,756] INFO day17:136 > B-MOD | B 1 = 8593 MOD 8 
+[2024-12-17 19:35:40,756] DEBUG day17:92 > STATE: PC: 2 | REG A: 8593 | REG B: 1 | REG C: 4296 | OUTPUT [2, 7, 4, 7] 
+[2024-12-17 19:35:40,756] DEBUG day17:93 > Instruction 1 | Argument Code 2 | Argument 2 
+[2024-12-17 19:35:40,756] DEBUG day17:130 > B-XOR | B 3 = B 1 ^ 2 
+[2024-12-17 19:35:40,756] DEBUG day17:92 > STATE: PC: 4 | REG A: 8593 | REG B: 3 | REG C: 4296 | OUTPUT [2, 7, 4, 7] 
+[2024-12-17 19:35:40,756] DEBUG day17:93 > Instruction 7 | Argument Code 5 | Argument 3 
+[2024-12-17 19:35:40,756] INFO day17:174 > C-DIV | C 1074 = A 8593 / 8 
+[2024-12-17 19:35:40,756] ERROR day17:59 > ERROR: invalid argument code 7 
+[2024-12-17 19:35:40,756] DEBUG day17:90 > Invalid argument but instruction 4 doesn't use arguments 
+[2024-12-17 19:35:40,756] DEBUG day17:92 > STATE: PC: 6 | REG A: 8593 | REG B: 3 | REG C: 1074 | OUTPUT [2, 7, 4, 7] 
+[2024-12-17 19:35:40,756] DEBUG day17:93 > Instruction 4 | Argument Code 7 | Argument -1 
+[2024-12-17 19:35:40,756] DEBUG day17:154 > B-XOR | B 1073 = B 3 ^ C 1074 
+[2024-12-17 19:35:40,756] DEBUG day17:92 > STATE: PC: 8 | REG A: 8593 | REG B: 1073 | REG C: 1074 | OUTPUT [2, 7, 4, 7] 
+[2024-12-17 19:35:40,756] DEBUG day17:93 > Instruction 1 | Argument Code 3 | Argument 3 
+[2024-12-17 19:35:40,756] DEBUG day17:130 > B-XOR | B 1074 = B 1073 ^ 3 
+[2024-12-17 19:35:40,756] DEBUG day17:92 > STATE: PC: 10 | REG A: 8593 | REG B: 1074 | REG C: 1074 | OUTPUT [2, 7, 4, 7] 
+[2024-12-17 19:35:40,756] DEBUG day17:93 > Instruction 5 | Argument Code 5 | Argument 1074 
+[2024-12-17 19:35:40,756] DEBUG day17:159 > PRINT 2 
+[2024-12-17 19:35:40,756] DEBUG day17:92 > STATE: PC: 12 | REG A: 8593 | REG B: 1074 | REG C: 1074 | OUTPUT [2, 7, 4, 7, 2] 
+[2024-12-17 19:35:40,756] DEBUG day17:93 > Instruction 0 | Argument Code 3 | Argument 3 
+[2024-12-17 19:35:40,756] INFO day17:120 > A-DIV | A 1074 = A 8593 / 8 
+[2024-12-17 19:35:40,756] DEBUG day17:92 > STATE: PC: 14 | REG A: 1074 | REG B: 1074 | REG C: 1074 | OUTPUT [2, 7, 4, 7, 2] 
+[2024-12-17 19:35:40,756] DEBUG day17:93 > Instruction 3 | Argument Code 0 | Argument 0 
+[2024-12-17 19:35:40,756] INFO day17:145 > JUMP | 0 
+[2024-12-17 19:35:40,756] DEBUG day17:92 > STATE: PC: 0 | REG A: 1074 | REG B: 1074 | REG C: 1074 | OUTPUT [2, 7, 4, 7, 2] 
+[2024-12-17 19:35:40,756] DEBUG day17:93 > Instruction 2 | Argument Code 4 | Argument 1074 
+[2024-12-17 19:35:40,756] INFO day17:136 > B-MOD | B 2 = 1074 MOD 8 
+[2024-12-17 19:35:40,756] DEBUG day17:92 > STATE: PC: 2 | REG A: 1074 | REG B: 2 | REG C: 1074 | OUTPUT [2, 7, 4, 7, 2] 
+[2024-12-17 19:35:40,756] DEBUG day17:93 > Instruction 1 | Argument Code 2 | Argument 2 
+[2024-12-17 19:35:40,756] DEBUG day17:130 > B-XOR | B 0 = B 2 ^ 2 
+[2024-12-17 19:35:40,756] DEBUG day17:92 > STATE: PC: 4 | REG A: 1074 | REG B: 0 | REG C: 1074 | OUTPUT [2, 7, 4, 7, 2] 
+[2024-12-17 19:35:40,756] DEBUG day17:93 > Instruction 7 | Argument Code 5 | Argument 0 
+[2024-12-17 19:35:40,756] INFO day17:174 > C-DIV | C 1074 = A 1074 / 1 
+[2024-12-17 19:35:40,756] ERROR day17:59 > ERROR: invalid argument code 7 
+[2024-12-17 19:35:40,756] DEBUG day17:90 > Invalid argument but instruction 4 doesn't use arguments 
+[2024-12-17 19:35:40,756] DEBUG day17:92 > STATE: PC: 6 | REG A: 1074 | REG B: 0 | REG C: 1074 | OUTPUT [2, 7, 4, 7, 2] 
+[2024-12-17 19:35:40,756] DEBUG day17:93 > Instruction 4 | Argument Code 7 | Argument -1 
+[2024-12-17 19:35:40,756] DEBUG day17:154 > B-XOR | B 1074 = B 0 ^ C 1074 
+[2024-12-17 19:35:40,756] DEBUG day17:92 > STATE: PC: 8 | REG A: 1074 | REG B: 1074 | REG C: 1074 | OUTPUT [2, 7, 4, 7, 2] 
+[2024-12-17 19:35:40,756] DEBUG day17:93 > Instruction 1 | Argument Code 3 | Argument 3 
+[2024-12-17 19:35:40,756] DEBUG day17:130 > B-XOR | B 1073 = B 1074 ^ 3 
+[2024-12-17 19:35:40,756] DEBUG day17:92 > STATE: PC: 10 | REG A: 1074 | REG B: 1073 | REG C: 1074 | OUTPUT [2, 7, 4, 7, 2] 
+[2024-12-17 19:35:40,756] DEBUG day17:93 > Instruction 5 | Argument Code 5 | Argument 1073 
+[2024-12-17 19:35:40,756] DEBUG day17:159 > PRINT 1 
+[2024-12-17 19:35:40,756] DEBUG day17:92 > STATE: PC: 12 | REG A: 1074 | REG B: 1073 | REG C: 1074 | OUTPUT [2, 7, 4, 7, 2, 1] 
+[2024-12-17 19:35:40,756] DEBUG day17:93 > Instruction 0 | Argument Code 3 | Argument 3 
+[2024-12-17 19:35:40,756] INFO day17:120 > A-DIV | A 134 = A 1074 / 8 
+[2024-12-17 19:35:40,756] DEBUG day17:92 > STATE: PC: 14 | REG A: 134 | REG B: 1073 | REG C: 1074 | OUTPUT [2, 7, 4, 7, 2, 1] 
+[2024-12-17 19:35:40,756] DEBUG day17:93 > Instruction 3 | Argument Code 0 | Argument 0 
+[2024-12-17 19:35:40,756] INFO day17:145 > JUMP | 0 
+[2024-12-17 19:35:40,756] DEBUG day17:92 > STATE: PC: 0 | REG A: 134 | REG B: 1073 | REG C: 1074 | OUTPUT [2, 7, 4, 7, 2, 1] 
+[2024-12-17 19:35:40,756] DEBUG day17:93 > Instruction 2 | Argument Code 4 | Argument 134 
+[2024-12-17 19:35:40,756] INFO day17:136 > B-MOD | B 6 = 134 MOD 8 
+[2024-12-17 19:35:40,756] DEBUG day17:92 > STATE: PC: 2 | REG A: 134 | REG B: 6 | REG C: 1074 | OUTPUT [2, 7, 4, 7, 2, 1] 
+[2024-12-17 19:35:40,756] DEBUG day17:93 > Instruction 1 | Argument Code 2 | Argument 2 
+[2024-12-17 19:35:40,756] DEBUG day17:130 > B-XOR | B 4 = B 6 ^ 2 
+[2024-12-17 19:35:40,756] DEBUG day17:92 > STATE: PC: 4 | REG A: 134 | REG B: 4 | REG C: 1074 | OUTPUT [2, 7, 4, 7, 2, 1] 
+[2024-12-17 19:35:40,756] DEBUG day17:93 > Instruction 7 | Argument Code 5 | Argument 4 
+[2024-12-17 19:35:40,756] INFO day17:174 > C-DIV | C 8 = A 134 / 16 
+[2024-12-17 19:35:40,756] ERROR day17:59 > ERROR: invalid argument code 7 
+[2024-12-17 19:35:40,756] DEBUG day17:90 > Invalid argument but instruction 4 doesn't use arguments 
+[2024-12-17 19:35:40,756] DEBUG day17:92 > STATE: PC: 6 | REG A: 134 | REG B: 4 | REG C: 8 | OUTPUT [2, 7, 4, 7, 2, 1] 
+[2024-12-17 19:35:40,756] DEBUG day17:93 > Instruction 4 | Argument Code 7 | Argument -1 
+[2024-12-17 19:35:40,756] DEBUG day17:154 > B-XOR | B 12 = B 4 ^ C 8 
+[2024-12-17 19:35:40,756] DEBUG day17:92 > STATE: PC: 8 | REG A: 134 | REG B: 12 | REG C: 8 | OUTPUT [2, 7, 4, 7, 2, 1] 
+[2024-12-17 19:35:40,756] DEBUG day17:93 > Instruction 1 | Argument Code 3 | Argument 3 
+[2024-12-17 19:35:40,756] DEBUG day17:130 > B-XOR | B 15 = B 12 ^ 3 
+[2024-12-17 19:35:40,756] DEBUG day17:92 > STATE: PC: 10 | REG A: 134 | REG B: 15 | REG C: 8 | OUTPUT [2, 7, 4, 7, 2, 1] 
+[2024-12-17 19:35:40,756] DEBUG day17:93 > Instruction 5 | Argument Code 5 | Argument 15 
+[2024-12-17 19:35:40,756] DEBUG day17:159 > PRINT 7 
+[2024-12-17 19:35:40,756] DEBUG day17:92 > STATE: PC: 12 | REG A: 134 | REG B: 15 | REG C: 8 | OUTPUT [2, 7, 4, 7, 2, 1, 7] 
+[2024-12-17 19:35:40,756] DEBUG day17:93 > Instruction 0 | Argument Code 3 | Argument 3 
+[2024-12-17 19:35:40,756] INFO day17:120 > A-DIV | A 16 = A 134 / 8 
+[2024-12-17 19:35:40,756] DEBUG day17:92 > STATE: PC: 14 | REG A: 16 | REG B: 15 | REG C: 8 | OUTPUT [2, 7, 4, 7, 2, 1, 7] 
+[2024-12-17 19:35:40,756] DEBUG day17:93 > Instruction 3 | Argument Code 0 | Argument 0 
+[2024-12-17 19:35:40,756] INFO day17:145 > JUMP | 0 
+[2024-12-17 19:35:40,756] DEBUG day17:92 > STATE: PC: 0 | REG A: 16 | REG B: 15 | REG C: 8 | OUTPUT [2, 7, 4, 7, 2, 1, 7] 
+[2024-12-17 19:35:40,756] DEBUG day17:93 > Instruction 2 | Argument Code 4 | Argument 16 
+[2024-12-17 19:35:40,756] INFO day17:136 > B-MOD | B 0 = 16 MOD 8 
+[2024-12-17 19:35:40,756] DEBUG day17:92 > STATE: PC: 2 | REG A: 16 | REG B: 0 | REG C: 8 | OUTPUT [2, 7, 4, 7, 2, 1, 7] 
+[2024-12-17 19:35:40,756] DEBUG day17:93 > Instruction 1 | Argument Code 2 | Argument 2 
+[2024-12-17 19:35:40,756] DEBUG day17:130 > B-XOR | B 2 = B 0 ^ 2 
+[2024-12-17 19:35:40,756] DEBUG day17:92 > STATE: PC: 4 | REG A: 16 | REG B: 2 | REG C: 8 | OUTPUT [2, 7, 4, 7, 2, 1, 7] 
+[2024-12-17 19:35:40,756] DEBUG day17:93 > Instruction 7 | Argument Code 5 | Argument 2 
+[2024-12-17 19:35:40,756] INFO day17:174 > C-DIV | C 4 = A 16 / 4 
+[2024-12-17 19:35:40,756] ERROR day17:59 > ERROR: invalid argument code 7 
+[2024-12-17 19:35:40,756] DEBUG day17:90 > Invalid argument but instruction 4 doesn't use arguments 
+[2024-12-17 19:35:40,756] DEBUG day17:92 > STATE: PC: 6 | REG A: 16 | REG B: 2 | REG C: 4 | OUTPUT [2, 7, 4, 7, 2, 1, 7] 
+[2024-12-17 19:35:40,756] DEBUG day17:93 > Instruction 4 | Argument Code 7 | Argument -1 
+[2024-12-17 19:35:40,756] DEBUG day17:154 > B-XOR | B 6 = B 2 ^ C 4 
+[2024-12-17 19:35:40,756] DEBUG day17:92 > STATE: PC: 8 | REG A: 16 | REG B: 6 | REG C: 4 | OUTPUT [2, 7, 4, 7, 2, 1, 7] 
+[2024-12-17 19:35:40,756] DEBUG day17:93 > Instruction 1 | Argument Code 3 | Argument 3 
+[2024-12-17 19:35:40,756] DEBUG day17:130 > B-XOR | B 5 = B 6 ^ 3 
+[2024-12-17 19:35:40,756] DEBUG day17:92 > STATE: PC: 10 | REG A: 16 | REG B: 5 | REG C: 4 | OUTPUT [2, 7, 4, 7, 2, 1, 7] 
+[2024-12-17 19:35:40,756] DEBUG day17:93 > Instruction 5 | Argument Code 5 | Argument 5 
+[2024-12-17 19:35:40,756] DEBUG day17:159 > PRINT 5 
+[2024-12-17 19:35:40,756] DEBUG day17:92 > STATE: PC: 12 | REG A: 16 | REG B: 5 | REG C: 4 | OUTPUT [2, 7, 4, 7, 2, 1, 7, 5] 
+[2024-12-17 19:35:40,756] DEBUG day17:93 > Instruction 0 | Argument Code 3 | Argument 3 
+[2024-12-17 19:35:40,756] INFO day17:120 > A-DIV | A 2 = A 16 / 8 
+[2024-12-17 19:35:40,756] DEBUG day17:92 > STATE: PC: 14 | REG A: 2 | REG B: 5 | REG C: 4 | OUTPUT [2, 7, 4, 7, 2, 1, 7, 5] 
+[2024-12-17 19:35:40,756] DEBUG day17:93 > Instruction 3 | Argument Code 0 | Argument 0 
+[2024-12-17 19:35:40,756] INFO day17:145 > JUMP | 0 
+[2024-12-17 19:35:40,756] DEBUG day17:92 > STATE: PC: 0 | REG A: 2 | REG B: 5 | REG C: 4 | OUTPUT [2, 7, 4, 7, 2, 1, 7, 5] 
+[2024-12-17 19:35:40,756] DEBUG day17:93 > Instruction 2 | Argument Code 4 | Argument 2 
+[2024-12-17 19:35:40,756] INFO day17:136 > B-MOD | B 2 = 2 MOD 8 
+[2024-12-17 19:35:40,756] DEBUG day17:92 > STATE: PC: 2 | REG A: 2 | REG B: 2 | REG C: 4 | OUTPUT [2, 7, 4, 7, 2, 1, 7, 5] 
+[2024-12-17 19:35:40,756] DEBUG day17:93 > Instruction 1 | Argument Code 2 | Argument 2 
+[2024-12-17 19:35:40,756] DEBUG day17:130 > B-XOR | B 0 = B 2 ^ 2 
+[2024-12-17 19:35:40,756] DEBUG day17:92 > STATE: PC: 4 | REG A: 2 | REG B: 0 | REG C: 4 | OUTPUT [2, 7, 4, 7, 2, 1, 7, 5] 
+[2024-12-17 19:35:40,756] DEBUG day17:93 > Instruction 7 | Argument Code 5 | Argument 0 
+[2024-12-17 19:35:40,756] INFO day17:174 > C-DIV | C 2 = A 2 / 1 
+[2024-12-17 19:35:40,756] ERROR day17:59 > ERROR: invalid argument code 7 
+[2024-12-17 19:35:40,756] DEBUG day17:90 > Invalid argument but instruction 4 doesn't use arguments 
+[2024-12-17 19:35:40,756] DEBUG day17:92 > STATE: PC: 6 | REG A: 2 | REG B: 0 | REG C: 2 | OUTPUT [2, 7, 4, 7, 2, 1, 7, 5] 
+[2024-12-17 19:35:40,756] DEBUG day17:93 > Instruction 4 | Argument Code 7 | Argument -1 
+[2024-12-17 19:35:40,756] DEBUG day17:154 > B-XOR | B 2 = B 0 ^ C 2 
+[2024-12-17 19:35:40,756] DEBUG day17:92 > STATE: PC: 8 | REG A: 2 | REG B: 2 | REG C: 2 | OUTPUT [2, 7, 4, 7, 2, 1, 7, 5] 
+[2024-12-17 19:35:40,756] DEBUG day17:93 > Instruction 1 | Argument Code 3 | Argument 3 
+[2024-12-17 19:35:40,756] DEBUG day17:130 > B-XOR | B 1 = B 2 ^ 3 
+[2024-12-17 19:35:40,756] DEBUG day17:92 > STATE: PC: 10 | REG A: 2 | REG B: 1 | REG C: 2 | OUTPUT [2, 7, 4, 7, 2, 1, 7, 5] 
+[2024-12-17 19:35:40,756] DEBUG day17:93 > Instruction 5 | Argument Code 5 | Argument 1 
+[2024-12-17 19:35:40,756] DEBUG day17:159 > PRINT 1 
+[2024-12-17 19:35:40,756] DEBUG day17:92 > STATE: PC: 12 | REG A: 2 | REG B: 1 | REG C: 2 | OUTPUT [2, 7, 4, 7, 2, 1, 7, 5, 1] 
+[2024-12-17 19:35:40,756] DEBUG day17:93 > Instruction 0 | Argument Code 3 | Argument 3 
+[2024-12-17 19:35:40,756] INFO day17:120 > A-DIV | A 0 = A 2 / 8 
+[2024-12-17 19:35:40,756] DEBUG day17:92 > STATE: PC: 14 | REG A: 0 | REG B: 1 | REG C: 2 | OUTPUT [2, 7, 4, 7, 2, 1, 7, 5, 1] 
+[2024-12-17 19:35:40,756] DEBUG day17:93 > Instruction 3 | Argument Code 0 | Argument 0 
+[2024-12-17 19:35:40,756] DEBUG day17:202 > HALT 
+[2024-12-17 19:35:40,756] INFO day17:221 > OUTPUT: 2,7,4,7,2,1,7,5,1 
