@@ -96,10 +96,6 @@ class Contender_class_asi:
             logging.error(f"ERROR: could not execute instruction {n_op_code} argument {n_arg}")
             return True #FAIL
 
-        
-
-        
-
         return False #OK
     
     def execute_op_code(self, in_op_code : int, in_arg : int ) -> bool:
@@ -127,7 +123,7 @@ class Contender_class_asi:
                 n_res = n_lhs ^ n_rhs
                 #write back
                 self.gln_reg[self.cn_index_register_b] = n_res
-                logging.debug(f"B-XOR | B {n_res} = B {n_lhs} ^ {n_rhs}")
+                logging.info(f"B-XOR | B {n_res} = B {n_lhs} ^ {n_rhs}")
             #B-MOD
             case 2:
                 n_reg_b = in_arg % 8
@@ -151,12 +147,12 @@ class Contender_class_asi:
                 n_res = n_lhs ^ n_rhs
                 #write back
                 self.gln_reg[self.cn_index_register_b] = n_res
-                logging.debug(f"B-XOR | B {n_res} = B {n_lhs} ^ C {n_rhs}")
+                logging.info(f"B-XOR | B {n_res} = B {n_lhs} ^ C {n_rhs}")
             #PRINT
             case 5:
                 n_res = in_arg % 8
                 self.ln_out.append(n_res)
-                logging.debug(f"PRINT {n_res}")
+                logging.info(f"PRINT {n_res} | {in_arg} % 8")
 
             #B-DIV
             case 6:
@@ -204,9 +200,53 @@ class Contender_class_asi:
     
 
 
+class Program_search:
+    a = 35200350
+    b = 0
+    c = 0
+    ln = [2,4,1,2,7,5,4,7,1,3,5,5,0,3,3,0]
+    ln_out = list()
+    
+    def __init__(self):
+        pass
 
+    def execute(self):
+        """
+        B-MOD | B 6 = 35200350 MOD 8 
+        B-XOR | B 4 = B 6 ^ 2 
+        C-DIV | C 2200021 = A 35200350 / 16 
+        B-XOR | B 2200017 = B 4 ^ C 2200021 
+        B-XOR | B 2200018 = B 2200017 ^ 3 
+        PRINT 2 | 2200018 % 8 
+        A-DIV | A 4400043 = A 35200350 / 8 
+        JUMP | 0 
 
+        B-MOD | B 3 = 4400043 MOD 8 
+        B-XOR | B 1 = B 3 ^ 2 
+        C-DIV | C 2200021 = A 4400043 / 2 
+        B-XOR | B 2200020 = B 1 ^ C 2200021 
+        B-XOR | B 2200023 = B 2200020 ^ 3 
+        PRINT 7 | 2200023 % 8 
+        A-DIV | A 550005 = A 4400043 / 8 
+        JUMP | 0 
+                
+        """
 
+        self.b = self.a % 8
+        self.b = self.b ^ 2
+        self.c = int(self.a / 2**self.b)
+        self.b = self.b ^ self.c
+        self.b = self.b ^ 3
+        self.a = int(self.a / 8)
+        return self.b % 8 
+
+    def run(self, in_a : int ):
+        self.ln_out = list()
+        self.a = in_a
+        while self.a > 0:
+            #logging.info(f"a: {self.a} | b {self.b} | c {self.c}")
+            n_out = self.execute()
+            self.ln_out.append(n_out)
 
 
 #------------------------------------------------------------------------------------------------------------------------------
@@ -214,13 +254,22 @@ class Contender_class_asi:
 #------------------------------------------------------------------------------------------------------------------------------
 
 def solution() -> bool:
-
     cl_mendicant_bias = Contender_class_asi()
     cl_mendicant_bias.run_program()
     s_output = cl_mendicant_bias.get_output()
     logging.info(f"OUTPUT: {s_output}")
 
     return False #OK
+
+def solution2():
+
+    cl_search = Program_search()
+    #cl_search.run(35200350)
+
+    for n_cnt in range (1000):
+        n_a = 35200350+n_cnt
+        cl_search.run(n_a)
+        logging.info(f"A {n_a} | OUT  {cl_search.ln_out}")
 
 #------------------------------------------------------------------------------------------------------------------------------
 #   MAIN
@@ -235,4 +284,6 @@ if __name__ == "__main__":
     )
     logging.info("Begin")
 
-    solution()
+    #solution()
+
+    solution2()
