@@ -6,7 +6,7 @@ import logging
 
 from typing import Set, Dict, List, Tuple
 
-#import copy
+import copy
 
 from map_of_symbols import Map_of_symbols
 
@@ -58,10 +58,22 @@ class Labirinth:
         self.gn_stack_max = 0
         self.gn_iterations = 0
 
+    def invert_start_goal(self, in_goal_dir : int)->bool:
+        self.st_agent, self.st_goal = self.st_goal, self.st_agent
+        self.st_agent.gn_dir = in_goal_dir
+        logging.info(f"INVERSION! Agent: {self.st_agent} | Goal: {self.st_goal}")
+        return False #OK
+
     def get_score(self) -> int:
         logging.info(f"Total Iterations: {self.gn_iterations} Maximum Stack: {self.gn_stack_max} Best Score {self.gn_best_score}")
-        #I start from 1 VOID + 1 FORWARD
-        return self.gn_best_score -self.cn_void -self.cn_price_forward
+        return self.gn_best_score
+
+    def get_map(self) -> Map_of_symbols:
+        """
+        Return a copy of the labirinth
+        """
+        return self.gcl_map
+
 
     def load_from_file( self, is_filename : str ) -> bool:
         #Load Map
@@ -330,16 +342,29 @@ class Labirinth:
                         if b_fail:
                             logging.error("ERROR: Failed to add token to queue")
                             return True #FAIL
-
-                        
-
+            #
             n_cnt_iterations += 1
             if n_cnt_iterations%50 == 0 or b_continue == False:
                 print(f"iteration: {n_cnt_iterations} stack: {len(lst_queue_of_tokens)} Goal Reached: {self.gn_best_score}")
+        #save iterations
         self.gn_iterations = n_cnt_iterations
+        #Correct the score to reflect the point system
+        for tnn_cursor in self.gcl_map:
+            b_fail, n_value = self.gcl_map.get_coordinate(tnn_cursor)
+            if n_value == self.cn_wall:
+                pass
+            #this is a tile that has never been explored
+            elif n_value == self.cn_void:
+                self.gcl_map.set_coordinate(tnn_cursor,self.cn_wall)
+            else:
+                n_value = n_value -self.cn_void -self.cn_price_forward
+                self.gcl_map.set_coordinate(tnn_cursor,n_value)
+
+        #correct the score
+        self.gn_best_score += -self.cn_void -self.cn_price_forward
+
+
         return False #OK
-
-
 
 
 
@@ -358,11 +383,11 @@ def solution() -> bool:
 
     cl_labirinth = Labirinth()
     #b_fail = cl_labirinth.load_from_file("day16/day16-example-10x10.txt")
-    #b_fail = cl_labirinth.load_from_file("day16/day16-example-15x15.txt")
+    b_fail = cl_labirinth.load_from_file("day16/day16-example-15x15.txt")
     #b_fail = cl_labirinth.load_from_file("day16/day16-example-17x17.txt")
     #b_fail = cl_labirinth.load_from_file("day16/day16-example-30x30.txt")
     #b_fail = cl_labirinth.load_from_file("day16/day16-example-60x60.txt")
-    b_fail = cl_labirinth.load_from_file("day16/day16-data-100x100.txt")
+    #b_fail = cl_labirinth.load_from_file("day16/day16-data-100x100.txt")
     if b_fail:
         logging.error(f"ERROR: could not load labirinth from file")
         return True #FAIL
@@ -381,6 +406,191 @@ def solution() -> bool:
     return False #OK
 
 
+def solution2() -> bool:
+
+    #s_filename_labirinth = "day16/day16-example-10x10.txt"
+    #s_filename_labirinth = "day16/day16-example-15x15.txt"
+    #s_filename_labirinth = "day16/day16-example-17x17.txt"
+    #s_filename_labirinth = "day16/day16-example-30x30.txt"
+    #s_filename_labirinth = "day16/day16-example-60x60.txt"
+    s_filename_labirinth = "day16/day16-data-100x100.txt"
+
+    #b_fail = cl_labirinth.load_from_file("day16/day16-example-15x15.txt")
+    #b_fail = cl_labirinth.load_from_file("day16/day16-example-17x17.txt")
+    #b_fail = cl_labirinth.load_from_file("day16/day16-example-30x30.txt")
+    #b_fail = cl_labirinth.load_from_file("day16/day16-example-60x60.txt")
+    #b_fail = cl_labirinth.load_from_file("day16/day16-data-100x100.txt")
+
+    #------------------------------------------------------------------------------------------------------------------------------
+    #   FORWARD SOLUTION
+    #------------------------------------------------------------------------------------------------------------------------------
+
+    cl_labirinth = Labirinth()
+    b_fail = cl_labirinth.load_from_file(s_filename_labirinth)
+    if b_fail:
+        logging.error(f"ERROR: could not load labirinth from file")
+        return True #FAIL
+    cl_labirinth.gcl_map.set_show_spacing(7)
+    cl_labirinth.translate_symbols_to_int()
+    cl_labirinth.color_labirinth( False)
+
+    n_score = cl_labirinth.get_score()
+    logging.info(f"SCORE: {n_score}")
+    
+    #------------------------------------------------------------------------------------------------------------------------------
+    #   REVERSE SOLUTION SOUTH
+    #------------------------------------------------------------------------------------------------------------------------------
+
+    cl_labirinth_reverse_south = Labirinth()
+    b_fail = cl_labirinth_reverse_south.load_from_file(s_filename_labirinth)
+    cl_labirinth_reverse_south.invert_start_goal(2)
+    cl_labirinth_reverse_south.gcl_map.set_show_spacing(7)
+    cl_labirinth_reverse_south.translate_symbols_to_int()
+    cl_labirinth_reverse_south.color_labirinth(False)
+    
+    #------------------------------------------------------------------------------------------------------------------------------
+    #   REVERSE SOLUTION WEST
+    #------------------------------------------------------------------------------------------------------------------------------
+
+    cl_labirinth_reverse_west = Labirinth()
+    b_fail = cl_labirinth_reverse_west.load_from_file(s_filename_labirinth)
+    cl_labirinth_reverse_west.invert_start_goal(3)
+    cl_labirinth_reverse_west.gcl_map.set_show_spacing(7)
+    cl_labirinth_reverse_west.translate_symbols_to_int()
+    cl_labirinth_reverse_west.color_labirinth(False)
+
+    #------------------------------------------------------------------------------------------------------------------------------
+    #   SUM TWO SOLUTIONS
+    #------------------------------------------------------------------------------------------------------------------------------
+
+    cl_forward_solution = cl_labirinth.get_map()
+    cl_reverse_solution_south = cl_labirinth_reverse_south.get_map()
+    cl_reverse_solution_west = cl_labirinth_reverse_west.get_map()
+
+    
+
+    tnn_size = cl_forward_solution.get_size()
+    logging.debug(f"SIZE: {tnn_size}")
+
+    #sum the forward and the reverse south
+    cl_map_forward_plus_reverse_south = Map_of_symbols()
+    cl_map_forward_plus_reverse_south.set_size(tnn_size, 0)
+    for tnn_cursor in cl_map_forward_plus_reverse_south:
+        n_y, n_x = tnn_cursor
+        
+        b_fail, n_forward = cl_forward_solution.get_coordinate( tnn_cursor )
+        if b_fail:
+            logging.error(f"ERROR scanning forward cursor {tnn_cursor}")
+            return True #FAIL
+        b_fail, n_reverse = cl_reverse_solution_south.get_coordinate( tnn_cursor )
+        if b_fail:
+            logging.error(f"ERROR scanning reverse cursor {tnn_cursor}")
+            return True #FAIL
+        #WALL
+        if n_forward == 0 and n_reverse == 0:
+            n_value = 0
+        else:
+            n_value = n_forward + n_reverse
+
+        cl_map_forward_plus_reverse_south.set_coordinate( tnn_cursor, n_value )
+
+    #sum the forward and the reverse west
+    cl_map_forward_plus_reverse_west = Map_of_symbols()
+    cl_map_forward_plus_reverse_west.set_size(tnn_size, 0)
+    for tnn_cursor in cl_map_forward_plus_reverse_west:
+        n_y, n_x = tnn_cursor
+        
+        b_fail, n_forward = cl_forward_solution.get_coordinate( tnn_cursor )
+        if b_fail:
+            logging.error(f"ERROR scanning forward cursor {tnn_cursor}")
+            return True #FAIL
+        b_fail, n_reverse = cl_reverse_solution_west.get_coordinate( tnn_cursor )
+        if b_fail:
+            logging.error(f"ERROR scanning reverse cursor {tnn_cursor}")
+            return True #FAIL
+        #WALL
+        if n_forward == 0:
+            n_value = 0
+        else:
+            n_value = n_forward + n_reverse
+
+        cl_map_forward_plus_reverse_west.set_coordinate( tnn_cursor, n_value )
+    
+    
+    logging.info(f"FORWARD SOLUTION")
+    cl_forward_solution.show_map()
+
+    logging.info("REVERSE SOLUTION SOUTH")
+    cl_reverse_solution_south.show_map()
+
+    logging.info("REVERSE SOLUTION WEST")
+    cl_reverse_solution_west.show_map()
+
+    logging.info("FORWARD PLUS REVERSE SOUTH")
+    cl_map_forward_plus_reverse_south.set_show_spacing(7)            
+    cl_map_forward_plus_reverse_south.show_map()
+
+    logging.info("FORWARD PLUS REVERSE WEST")
+    cl_map_forward_plus_reverse_west.set_show_spacing(7)            
+    cl_map_forward_plus_reverse_west.show_map()
+    
+    #I think it's the score plus EXACTLY one rotation that are adjacent to the best path
+
+    logging.info(f"SCORE: {n_score}")
+    def find_optimal_path( icl_map : Map_of_symbols, in_score : int ) -> bool:
+        #pick the tiles with the optimal score
+        b_fail, ltnn_best_path_exact = cl_map_forward_plus_reverse_south.find_symbol( n_score )
+        #pick the tile one rotation early
+        b_fail, ltnn_best_path_minus_rotation = cl_map_forward_plus_reverse_south.find_symbol( n_score -1000 )
+        #pick the tile one rotation late
+        b_fail, ltnn_best_path_plus_rotation = cl_map_forward_plus_reverse_south.find_symbol( n_score +1000 )
+
+        ltnn_best_path : List[Tuple[int,int]]= list()
+        for tnn_cursor in ltnn_best_path_exact:
+            if tnn_cursor not in ltnn_best_path:
+                ltnn_best_path.append(tnn_cursor)
+        
+        for tnn_cursor in ltnn_best_path_minus_rotation:
+            if tnn_cursor not in ltnn_best_path:
+                ltnn_best_path.append(tnn_cursor)
+        
+        for tnn_cursor in ltnn_best_path_plus_rotation:
+            if tnn_cursor not in ltnn_best_path:
+                ltnn_best_path.append(tnn_cursor)
+
+        return False, ltnn_best_path
+
+
+    b_fail, ltnn_best_path = find_optimal_path( cl_map_forward_plus_reverse_south, n_score )
+    
+    logging.debug(f"Tiles in the best path {len(ltnn_best_path)}")
+
+    #create a new labirinth where I show the solution
+    cl_labirinth_visualize = Labirinth()
+    cl_labirinth_visualize.load_from_file(s_filename_labirinth)
+    cl_map_visualize = cl_labirinth_visualize.get_map()
+    for tnn_best in ltnn_best_path:
+        #Mark the optimal path
+        cl_map_visualize.set_coordinate( tnn_best, 'X' )
+        #I look for walls near the adjacent and mark them with a special observation wall
+        #b_fail, ltnn_observation_wall = cl_map_visualize.find_four_connect( tnn_best, '#' )
+        #for tnn_observe in ltnn_observation_wall:
+        #    cl_map_visualize.set_coordinate( tnn_observe, '&' )
+
+    cl_map_visualize.show_map()
+
+    b_fail, ltnn_observation = cl_map_visualize.find_symbol( '&' )
+    logging.info(f"Observation spots: {len(ltnn_observation)}")
+
+
+
+
+
+    #cl_map_forward_plus_reverse_south.find_symbol(
+
+    return False #OK
+
+
 #------------------------------------------------------------------------------------------------------------------------------
 #   MAIN
 #------------------------------------------------------------------------------------------------------------------------------
@@ -394,4 +604,5 @@ if __name__ == "__main__":
     )
     logging.info("Begin")
 
-    solution()
+    #solution()
+    solution2()

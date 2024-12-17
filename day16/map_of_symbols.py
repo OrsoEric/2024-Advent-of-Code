@@ -214,7 +214,7 @@ class Map_of_symbols:
         Returns:
             Tuple[int, int]: Height (Y) and Width (X) of the map.
         """
-        return self.gn_width, self.gn_height
+        return self.gn_height, self.gn_width
 
     def get_four_connect(self, itnn_start: Tuple[int, int]) -> List[Tuple[int, int]]:
         """
@@ -264,7 +264,7 @@ class Map_of_symbols:
                 ltnn_four_connect.append((tnn_test[0], tnn_test[1], n_dir))
         return ltnn_four_connect
 
-    def find_four_connect(self, itnn_start: Tuple[int, int], is_symbol: str) -> Tuple[bool, List[Tuple[int, int]]]:
+    def find_four_connect(self, itnn_start: Tuple[int, int], is_symbol: str, ib_debug=False) -> Tuple[bool, List[Tuple[int, int]]]:
         """
         Finds all four-connected coordinates with the same symbol.
 
@@ -289,8 +289,8 @@ class Map_of_symbols:
             b_fail, s_symbol = self.get_coordinate(tnn_test)
             if not b_fail and s_symbol == is_symbol:
                 ltnn_four_connect.append(tnn_test)
-
-        logging.debug(f"Symbol {s_symbol} Coordinate {itnn_start} | {len(ltnn_four_connect)} Four Connect found | Coordinates {ltnn_four_connect}")
+        if ib_debug:
+            logging.debug(f"Symbol {s_symbol} Coordinate {itnn_start} | {len(ltnn_four_connect)} Four Connect found | Coordinates {ltnn_four_connect}")
         return False, ltnn_four_connect
     
 
@@ -317,6 +317,15 @@ class Map_of_symbols:
                 ltnn_coordinates.append(tnn_coordinate)
         return False, ltnn_coordinates  # Success, return list of coordinates
     
+    def set_size( self, tnn_size : Tuple[int, int], is_default_value : str ):
+        self.gn_height = tnn_size[0]
+        self.gn_width = tnn_size[1]
+        logging.debug(f"Size H: {self.gn_height} W: {self.gn_width}")
+        self.glln_map = [[-1 for _ in range(self.gn_width)] for _ in range(self.gn_height)]
+
+        self.clear_map(is_default_value)
+        return False #OK
+
     def clear_map(self, is_default_value):
         for tnn_coordinate in self:
             b_fail = self.set_coordinate( tnn_coordinate, is_default_value )
