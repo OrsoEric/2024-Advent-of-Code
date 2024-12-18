@@ -201,6 +201,7 @@ class Contender_class_asi:
 
 
 class Program_search:
+    ln_a = list()
     a = 35200350
     b = 0
     c = 0
@@ -209,6 +210,25 @@ class Program_search:
     
     def __init__(self):
         pass
+    
+    @staticmethod
+    def number_to_list( in_value : int ) -> List[int]:
+        ln_value = [int(s_value) for s_value in str(in_value)]
+        return ln_value
+    
+    @staticmethod
+    def list_to_number( iln_value : List[int]) -> int:
+        return int
+
+    def norm_list( iln_a : int, iln_b : int ):
+        """
+        absolute difference between two lists
+        returns a list as short as the shortest list with digit difference
+        returns a value that is the sum of the square of the difference between digits
+        do not take into account long chunks
+        """
+
+        return 0
 
     def execute(self):
         """
@@ -220,16 +240,6 @@ class Program_search:
         PRINT 2 | 2200018 % 8 
         A-DIV | A 4400043 = A 35200350 / 8 
         JUMP | 0 
-
-        B-MOD | B 3 = 4400043 MOD 8 
-        B-XOR | B 1 = B 3 ^ 2 
-        C-DIV | C 2200021 = A 4400043 / 2 
-        B-XOR | B 2200020 = B 1 ^ C 2200021 
-        B-XOR | B 2200023 = B 2200020 ^ 3 
-        PRINT 7 | 2200023 % 8 
-        A-DIV | A 550005 = A 4400043 / 8 
-        JUMP | 0 
-                
         """
 
         self.b = self.a % 8
@@ -240,13 +250,20 @@ class Program_search:
         self.a = int(self.a / 8)
         return self.b % 8 
 
-    def run(self, in_a : int ):
+    def run(self, in_a : int ) -> List[int]:
+        #convert a into a list of int
+        self.ln_a = self.number_to_list( self.a )
+        logging.debug(f"A: {self.ln_a}")
+
         self.ln_out = list()
         self.a = in_a
         while self.a > 0:
             #logging.info(f"a: {self.a} | b {self.b} | c {self.c}")
             n_out = self.execute()
-            self.ln_out.append(n_out)
+            #self.ln_out.append(n_out)
+            self.ln_out.insert(0, n_out)
+
+        
 
 
 #------------------------------------------------------------------------------------------------------------------------------
