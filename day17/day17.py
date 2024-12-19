@@ -48,6 +48,10 @@ class Contender_class_asi:
         self.gln_reg : List[int] = [311088887754672, 0, 0]
         self.gln_mem : List[int] = [2,4,1,2,7,5,4,7,1,3,5,5,0,3,3,0]
 
+        #from the octal scan. Match 7
+        self.gln_reg : List[int] = [37186644195828, 0, 0]
+        self.gln_mem : List[int] = [2,4,1,2,7,5,4,7,1,3,5,5,0,3,3,0]
+
         #program counter
         self.gn_program_counter = 0
         #argument decoding

@@ -12,6 +12,8 @@ from typing import Set, Dict, List, Tuple
 
 from genetic_octal import Individual
 
+from genetic_octal import Solver_left_to_right
+
 #------------------------------------------------------------------------------------------------------------------------------
 #   RULES
 #------------------------------------------------------------------------------------------------------------------------------
@@ -30,27 +32,15 @@ def number_to_list( in_value : int ) -> List[int]:
     ln_value = [int(s_value) for s_value in str(in_value)]
     return ln_value
 
-
-
-#------------------------------------------------------------------------------------------------------------------------------
-#   MAIN
-#------------------------------------------------------------------------------------------------------------------------------
-
-if __name__ == "__main__":
-    logging.basicConfig(
-        filename="day17/day17.log",
-        level=logging.INFO,
-        format='[%(asctime)s] %(levelname)s %(module)s:%(lineno)d > %(message)s ',
-        filemode='w'
-    )
-    logging.info("Begin")
-
+def test():
     n = number_to_list(1065674065136766)
     nr = n[::-1]
     logging.info(f"Convert number to list {n} | reverse {nr}")
 
     #desired sequence
-    ln_desired = [0, 3, 3, 0, 5, 5, 3, 1, 7, 4, 5, 7, 2, 1, 4, 2] 
+    #ln_desired_reverse = [0, 3, 3, 0, 5, 5, 3, 1, 7, 4, 5, 7, 2, 1, 4, 2] 
+
+    ln_desired = [2,4,1,2,7,5,4,7,1,3,5,5,0,3,3,0]
 
 
     #decimal
@@ -66,3 +56,30 @@ if __name__ == "__main__":
     cl_individual.ln_input_octal_reverse = [6, 6, 7, 6, 3, 1, 5, 6, 0, 4, 7, 6, 5, 6, 0, 1] 
     cl_individual.evaluate( ln_desired )
     logging.info(f"{cl_individual}")
+
+#------------------------------------------------------------------------------------------------------------------------------
+#   MAIN
+#------------------------------------------------------------------------------------------------------------------------------
+
+if __name__ == "__main__":
+    logging.basicConfig(
+        filename="day17/day17.log",
+        level=logging.INFO,
+        format='[%(asctime)s] %(levelname)s %(module)s:%(lineno)d > %(message)s ',
+        filemode='w'
+    )
+    logging.info("Begin")
+
+    #ALL wrong
+    #ln_input_octal_reverse = [6, 6, 7, 6, 3, 1, 5, 6, 0, 4, 7, 6, 5, 6, 0, 1] 
+    #7 left correct
+    ln_input_octal_reverse = [4, 6, 7, 4, 3, 7, 5, 5, 0, 6, 0, 1, 5, 3, 0, 1]
+    ln_output_desired = [2,4,1,2,7,5,4,7,1,3,5,5,0,3,3,0]
+
+    cl_solver = Solver_left_to_right()
+    cl_solver.load_initial_solution( ln_input_octal_reverse, ln_output_desired  )
+    cl_solver.solve_left_to_right_brute_force()
+
+
+
+    
