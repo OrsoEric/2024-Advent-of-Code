@@ -55,7 +55,8 @@ class Contender_class_asi:
         #14 left correct, longeer input
         self.gln_reg : List[int] = [110346850582004, 0, 0]
         self.gln_mem : List[int] = [2,4,1,2,7,5,4,7,1,3,5,5,0,3,3,0]
-        
+
+        logging.info(f"A List: {number_to_list(self.gln_reg[0])}")
 
         #program counter
         self.gn_program_counter = 0
@@ -301,9 +302,6 @@ class Program_search:
             #self.ln_out.append(n_out)
             self.ln_out.insert(0, n_out)
 
-        
-
-
 #------------------------------------------------------------------------------------------------------------------------------
 #   SOLUTION
 #------------------------------------------------------------------------------------------------------------------------------
@@ -353,18 +351,22 @@ if __name__ == "__main__":
     )
     logging.info("Begin")
 
+
+
     
 
     solution()
 
     #solution2()
 
+    
+
 
     #logging.info(f"Convert to list: {number_to_list(77772221938660)}")
     #n_decimal = 35580059893236
     #n_octal = oct(n_decimal)
     #logging.info(f"{n_octal}")
-    ln = number_to_list(1005604065136764)
+    #ln = number_to_list(1005604065136764)
     #ln=[3, 5, 5, 8, 0, 0, 5, 9, 8, 9, 3, 2, 3, 6]
-    logging.info(f"eversse List: {ln[::-1]}")
+    #logging.info(f"eversse List: {ln[::-1]}")
     

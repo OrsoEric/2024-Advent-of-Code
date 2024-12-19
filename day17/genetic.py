@@ -289,7 +289,8 @@ class Population:
                 #just generate variations with 1
 
                 #if this digit is near the leftmost digit
-                if (n_index >= cl_survivor.cl_fitness.n_leftmost_correct_digit-2) and (n_index < cl_survivor.cl_fitness.n_leftmost_correct_digit+1):
+                #if (n_index >= cl_survivor.cl_fitness.n_leftmost_correct_digit-2) and (n_index < cl_survivor.cl_fitness.n_leftmost_correct_digit+1):
+                if False:
                     #generate one variation for each possible digit
                     for n_cnt in range(9+1):
                         cl_clone = cl_survivor.clone()
@@ -300,19 +301,33 @@ class Population:
                     pass
                 else:
                     #clone the survivor and increase each digit by 1
-                    cl_clone = cl_survivor.clone()
+                    
                     if (n_digit < 9):
+                        cl_clone = cl_survivor.clone()
                         cl_clone.ln_input[n_index] += 1
+                        cl_clone.evaluate( self.ln_output_desired )
+                        self.add_individual_to_population( cl_clone )
+                    if (n_digit < 8):
+                        cl_clone = cl_survivor.clone()
+                        cl_clone.ln_input[n_index] += 2
                         cl_clone.evaluate( self.ln_output_desired )
                         self.add_individual_to_population( cl_clone )
 
                     #clone the survivor and decrease each digit by 1
-                    cl_clone = cl_survivor.clone()
+                    
                     if (n_digit > 0):
+                        cl_clone = cl_survivor.clone()
                         cl_clone.ln_input[n_index] -= 1
                         cl_clone.evaluate( self.ln_output_desired )
                         self.add_individual_to_population( cl_clone )
+                        
+                    if (n_digit > 1):
+                        cl_clone = cl_survivor.clone()
+                        cl_clone.ln_input[n_index] -= 2
+                        cl_clone.evaluate( self.ln_output_desired )
+                        self.add_individual_to_population( cl_clone )
 
+            """
             logging.debug("CLONES with one additional digit as input")
             #for each possible digit
             for n_digit in range(1,9+1):
@@ -326,7 +341,7 @@ class Population:
                 cl_clone.ln_input.append(n_digit)
                 cl_clone.evaluate( self.ln_output_desired )
                 self.add_individual_to_population( cl_clone )       
-
+            
             logging.debug("CLONES with one digit removed")  
             #for each digit
             for n_index, n_digit in enumerate(cl_survivor.ln_input):
@@ -335,6 +350,7 @@ class Population:
                 del cl_clone.ln_input[n_index]
                 cl_clone.evaluate( self.ln_output_desired )
                 self.add_individual_to_population( cl_clone )
+            """
 
 
         return False #OK

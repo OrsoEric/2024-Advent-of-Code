@@ -82,8 +82,8 @@ def solution() -> bool:
     #cl_population.add_input_to_population( [7, 7, 7, 7, 2, 2, 2, 1, 9, 3, 8, 6, 6, 0]  )
     
     cl_population.show()
-    #cl_population.search( 1000 )
-    cl_population.test_combination( 5, 9 )
+    cl_population.search( 1000 )
+    #cl_population.test_combination( 5, 9 )
     cl_population.show_as_info()
 
     return False #OK

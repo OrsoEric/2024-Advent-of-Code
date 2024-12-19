@@ -85,8 +85,11 @@ if __name__ == "__main__":
     #ln_input_octal_reverse = [4, 6, 7, 6, 3, 1, 5, 6, 0, 4, 0, 6, 4, 0, 5, 1, 0, 0]
 
     #one more digit
-    ln_input_octal_reverse = [4, 6, 7, 6, 3, 1, 5, 6, 0, 4, 0, 6, 5, 0, 1, 3, 0, 0]
+    #ln_input_octal_reverse = [4, 6, 7, 6, 3, 1, 5, 6, 0, 4, 0, 6, 5, 0, 1, 3, 0, 0]
     
+    """
+    #not needed
+    ln_input_octal_reverse = [4, 6, 7, 6, 3, 1, 5, 6, 0, 4, 0, 6, 5, 0, 1, 3]
 
 
     ln_output_desired = [2,4,1,2,7,5,4,7,1,3,5,5,0,3,3,0]
@@ -94,9 +97,18 @@ if __name__ == "__main__":
     
 
     cl_solver = Solver_left_to_right()
+    #remove partial solutions
+    cl_solver.gdln_exclude.append([4, 6, 7, 6, 3, 1, 5, 6, 0, 4, 0, 6, 5, 6, 1, 3])
+    cl_solver.gdln_exclude.append([4, 6, 7, 6, 3, 1, 5, 6, 0, 4, 7, 6, 5, 6, 1, 3])
+    
     cl_solver.load_initial_solution( ln_input_octal_reverse, ln_output_desired  )
     cl_solver.solve_left_to_right_brute_force()
+    """
 
+    cl_individual = Individual()
+    cl_individual.ln_input_octal_reverse = [4, 6, 7, 6, 3, 1, 5, 6, 0, 0, 1, 5, 5, 3, 0, 1]
+    cl_individual.evaluate( [2, 4, 1, 2, 7, 5, 4, 7, 1, 3, 5, 5, 0, 3, 3, 0] )
+    logging.info(cl_individual)
 
 
     
