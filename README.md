@@ -78,6 +78,46 @@ SOLUTION: Level: 16 | Visits: 0 | Num Children: 0 | Payload Fitness: 16 16 | Inp
 [2, 4, 1, 2, 7, 5, 4, 7, 1, 3, 5, 5, 0, 3, 3, 0]
 [2, 4, 1, 2, 7, 5, 4, 7, 1, 3, 5, 5, 0, 3, 3, 0] < DESIRED
 
+IT CONVERGES!!!
+
+It converges really fast, and I found at least three solutions
+
+37221274271220 octal: 0o1035510065136764 
+[4, 6, 7, 6, 3, 1, 5, 6, 0, 0, 1, 5, 5, 3, 0, 1]
+[2, 4, 1, 2, 7, 5, 4, 7, 1, 3, 5, 5, 0, 3, 3, 0]
+
+38878594776564 octal: 0o1065604065136764
+[4, 6, 7, 6, 3, 1, 5, 6, 0, 4, 0, 6, 5, 6, 0, 1]
+[2, 4, 1, 2, 7, 5, 4, 7, 1, 3, 5, 5, 0, 3, 3, 0]  
+
+38886110969332 octal: 0o1065674065136764
+[4, 6, 7, 6, 3, 1, 5, 6, 0, 4, 7, 6, 5, 6, 0, 1]
+[2, 4, 1, 2, 7, 5, 4, 7, 1, 3, 5, 5, 0, 3, 3, 0] 
+
+I did an octal tree search, where each node is an octal digit.
+The traversal from the root to a leaf is the solution.
+I have a cursor
+At any iteration the cursor can descend to a child or go up to the father
+This navigation is controlled by a fitness
+10 points for getting cconsecutive rightmost digits right
+1 point for getting any digit right
+-1 point for each time the node was visited
+
+I added a die rolls
+One gives an increasing chance to move the cursor up, for every level below the rightmost matched digit
+This is there because left digits do have an effect on right digits up to 5 digits away
+I make it so it balances exploration of more near digits with higher effect, vs farther digits with lower effect
+
+
+I added a die roll
+It givess chance to go up the more the child is visited compared to the father
+
+Had still not converged, I had the plan of rolling which child to go to weighted by its fitness
+
+I'm very happy with this tree search algorithm, I think this structure will help me solve more multidimensional discrete problems
+
+TODO: ask llama3.2 to improve documentation
+
 
 
 
