@@ -1,0 +1,25 @@
+looks like I can reuse the same labirinth solving I did previously
+
+[2024-12-19 18:11:14,431] INFO map_of_symbols:159 > 
+Width: 7 | Height: 7
+ . . . # . . .
+ . . # . . # .
+ . . . . # . .
+ . . . # . . #
+ . . # . . # .
+ . # . . # . .
+ # . # . . . . 
+
+...#...
+..#..#.
+....#..
+...#..#
+..#..#.
+.#..#..
+#.#....
+
+the loading of the first steps of the map was easy
+
+Now i encapsulate the solution from Day16 into a proper labirinth class
+
+labirinth class operational and loads from list of walls
