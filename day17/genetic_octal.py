@@ -235,7 +235,7 @@ class Solver_left_to_right():
         self.glcl_population : List[Individual] = list()
 
         #solutions to be excluded for survivor choice
-        self.gdln_exclude : Set[List[Individual]] = set()
+        self.gdln_exclude : List[List[Individual]] = list()
 
     def load_initial_solution( self,  iln_octal_reverse_initial : List[int], iln_desired_output : List[int] ) -> bool:
         self.gln_octal_reverse_initial = iln_octal_reverse_initial
@@ -319,15 +319,15 @@ class Solver_left_to_right():
         logging.debug(f"{cl_individual}")
 
         b_continue = True
-        n_index_start = 0
-        n_num_octal_digits = 4
+        n_index_start = 11
+        n_num_octal_digits = 5
 
         while b_continue:
             logging.info(f"Scanning index {n_index_start} to {n_index_start +n_num_octal_digits}")
             logging.info(f"SURVIVOR: {cl_individual} | Leftmost: {cl_individual.cl_fitness.n_leftmost_correct_digit}")
 
             #exclude current individual from being selected again
-            self.gdln_exclude.add(cl_individual.ln_input_octal_reverse)
+            self.gdln_exclude.append(cl_individual.ln_input_octal_reverse)
 
             #
             b_fail = self.generate_solutions( cl_individual, n_index_start, n_num_octal_digits )
@@ -340,17 +340,13 @@ class Solver_left_to_right():
 
             #pick the survivor before the genocide
             cl_individual = self.glcl_population[0]
-
+            logging.info(f"Leftmost: {cl_individual.cl_fitness.n_leftmost_correct_digit}")
             #move the search right
             n_index_start += 1
             if n_index_start >= n_len_input-n_num_octal_digits:
                 b_continue = False
 
-
-
-            #self.show()
-
-
+            #self.show_as_info()
 
         return False #OK
     

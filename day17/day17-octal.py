@@ -53,7 +53,8 @@ def test():
     #[6, 6, 7, 6, 3, 1, 5, 6, 0, 4, 7, 6, 5, 6, 0, 1] 
 
     cl_individual = Individual()
-    cl_individual.ln_input_octal_reverse = [6, 6, 7, 6, 3, 1, 5, 6, 0, 4, 7, 6, 5, 6, 0, 1] 
+    #cl_individual.ln_input_octal_reverse = [6, 6, 7, 6, 3, 1, 5, 6, 0, 4, 7, 6, 5, 6, 0, 1] 
+    cl_individual.ln_input_octal_reverse = [4, 6, 7, 6, 3, 1, 5, 6, 0, 4, 0, 6, 5, 0, 0, 1] 
     cl_individual.evaluate( ln_desired )
     logging.info(f"{cl_individual}")
 
@@ -73,8 +74,24 @@ if __name__ == "__main__":
     #ALL wrong
     #ln_input_octal_reverse = [6, 6, 7, 6, 3, 1, 5, 6, 0, 4, 7, 6, 5, 6, 0, 1] 
     #7 left correct
-    ln_input_octal_reverse = [4, 6, 7, 4, 3, 7, 5, 5, 0, 6, 0, 1, 5, 3, 0, 1]
+    #ln_input_octal_reverse = [4, 6, 7, 4, 3, 7, 5, 5, 0, 6, 0, 1, 5, 3, 0, 1]
+    #1 digit solution
+    #ln_input_octal_reverse = [4, 6, 7, 6, 3, 1, 5, 6, 0, 4, 0, 6, 5, 0, 0, 1]
+    #13 left solution
+    #ln_input_octal_reverse = [4, 6, 7, 6, 3, 1, 5, 6, 0, 4, 0, 6, 5, 4, 0, 1, 0]
+
+    #14 left solution. Just one digit wrong
+    #ln_input_octal_reverse = [4, 6, 7, 6, 3, 1, 5, 6, 0, 4, 0, 6, 5, 4, 0, 1, 0 ,0]
+    #ln_input_octal_reverse = [4, 6, 7, 6, 3, 1, 5, 6, 0, 4, 0, 6, 4, 0, 5, 1, 0, 0]
+
+    #one more digit
+    ln_input_octal_reverse = [4, 6, 7, 6, 3, 1, 5, 6, 0, 4, 0, 6, 5, 0, 1, 3, 0, 0]
+    
+
+
     ln_output_desired = [2,4,1,2,7,5,4,7,1,3,5,5,0,3,3,0]
+    #1 digit solution
+    
 
     cl_solver = Solver_left_to_right()
     cl_solver.load_initial_solution( ln_input_octal_reverse, ln_output_desired  )

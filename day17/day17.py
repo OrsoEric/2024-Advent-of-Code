@@ -42,15 +42,20 @@ class Contender_class_asi:
         #self.gln_mem : List[int] = [2,4,1,2,7,5,4,7,1,3,5,5,0,3,3,0]
  
         #TEST PART 14 left digit correct
-        self.gln_reg : List[int] = [38886110969334, 0, 0]
-        self.gln_mem : List[int] = [2,4,1,2,7,5,4,7,1,3,5,5,0,3,3,0]
+        #self.gln_reg : List[int] = [38886110969334, 0, 0]
+        #self.gln_mem : List[int] = [2,4,1,2,7,5,4,7,1,3,5,5,0,3,3,0]
         #add an octal 0 to the right side
-        self.gln_reg : List[int] = [311088887754672, 0, 0]
-        self.gln_mem : List[int] = [2,4,1,2,7,5,4,7,1,3,5,5,0,3,3,0]
+        #self.gln_reg : List[int] = [311088887754672, 0, 0]
+        #self.gln_mem : List[int] = [2,4,1,2,7,5,4,7,1,3,5,5,0,3,3,0]
 
         #from the octal scan. Match 7
-        self.gln_reg : List[int] = [37186644195828, 0, 0]
+        #self.gln_reg : List[int] = [37186644195828, 0, 0]
+        #self.gln_mem : List[int] = [2,4,1,2,7,5,4,7,1,3,5,5,0,3,3,0]
+
+        #14 left correct, longeer input
+        self.gln_reg : List[int] = [110346850582004, 0, 0]
         self.gln_mem : List[int] = [2,4,1,2,7,5,4,7,1,3,5,5,0,3,3,0]
+        
 
         #program counter
         self.gn_program_counter = 0
@@ -77,18 +82,19 @@ class Contender_class_asi:
     def decode_argument(self, in_arg_code : int ) -> Tuple[bool, int]:
         if in_arg_code < 0 or in_arg_code >= 7:
             logging.error(f"ERROR: invalid argument code {in_arg_code}")
-            return True, -1
+            return True, -1, "N.A."
 
+        s_arg = 'n'
         match in_arg_code:
             case self.cn_arg_op_register_a:
-                return False, self.gln_reg[self.cn_index_register_a]
+                return False, self.gln_reg[self.cn_index_register_a], 'R.A'
             case self.cn_arg_op_register_b:
-                return False, self.gln_reg[self.cn_index_register_b]
+                return False, self.gln_reg[self.cn_index_register_b], 'R.B'
             case self.cn_arg_op_register_c:
-                return False, self.gln_reg[self.cn_index_register_c]
+                return False, self.gln_reg[self.cn_index_register_c], 'R.C'
 
         #return 1, 2, 3
-        return False, in_arg_code #OK
+        return False, in_arg_code, s_arg #OK
 
     def execute( self ) -> bool:
         """
@@ -100,7 +106,7 @@ class Contender_class_asi:
         n_op_code = self.gln_mem[self.gn_program_counter]
         n_arg_code = self.gln_mem[self.gn_program_counter +1]
         #DECODE ARGUMENT
-        b_fail, n_arg = self.decode_argument( n_arg_code )
+        b_fail, n_arg, s_arg = self.decode_argument( n_arg_code )
         if b_fail:
             if n_op_code != 4:
                 logging.error(f"ERROR: could not decode argument. Instruction {n_op_code} | Argument Code {n_arg_code}")
@@ -110,7 +116,7 @@ class Contender_class_asi:
 
         logging.debug(f"STATE: {self}")
         logging.debug(f"Instruction {n_op_code} | Argument Code {n_arg_code} | Argument {n_arg}")
-        b_fail = self.execute_op_code( n_op_code, n_arg )
+        b_fail = self.execute_op_code( n_op_code, n_arg, s_arg )
         if b_fail:
             logging.error(f"ERROR: could not execute instruction {n_op_code} argument {n_arg}")
             return True #FAIL
@@ -124,7 +130,7 @@ class Contender_class_asi:
         logging.info("-----------------------------------------------------")
         return False
     
-    def execute_op_code(self, in_op_code : int, in_arg : int ) -> bool:
+    def execute_op_code(self, in_op_code : int, in_arg : int, s_arg : str ) -> bool:
         if in_op_code < 0 or in_op_code > 7:
             logging.error(f"ERROR: invalid op code {in_op_code}")
             return True
@@ -138,7 +144,7 @@ class Contender_class_asi:
                 n_num = n_reg_a
                 n_den = 2**in_arg
                 n_reg_a = int( n_num / n_den )
-                logging.info(f"A-DIV | A {n_reg_a} = A {n_num} / {n_den}")
+                logging.info(f"A-DIV | A {n_reg_a} = A {n_num} / 2**{s_arg} {n_den}")
                 logging.info(f"A-DIV | A {oct(n_reg_a)} = A {oct(n_num)} / {oct(n_den)}")
                 #write back
                 self.gln_reg[self.cn_index_register_a] = n_reg_a
@@ -156,7 +162,7 @@ class Contender_class_asi:
                 n_reg_b = in_arg % 8
                 #WRITE BACK
                 self.gln_reg[self.cn_index_register_b] =n_reg_b
-                logging.info(f"B-MOD | B {n_reg_b} = {in_arg} MOD 8")
+                logging.info(f"B-MOD | B {n_reg_b} = {s_arg} {in_arg} MOD 8")
                 logging.info(f"B-MOD | B {oct(n_reg_b)} = {oct(in_arg)} MOD 8")
             #JUMP
             case 3:
@@ -166,7 +172,7 @@ class Contender_class_asi:
                 else:
                     b_jump = True
                     self.gn_program_counter = in_arg
-                    logging.info(f"JUMP | {in_arg}")
+                    logging.info(f"JUMP | {s_arg} {in_arg}")
                     self.show_registers()
 
             #BC-XOR
@@ -182,7 +188,7 @@ class Contender_class_asi:
             case 5:
                 n_res = in_arg % 8
                 self.ln_out.append(n_res)
-                logging.info(f"PRINT {n_res} | {in_arg} % 8")
+                logging.info(f"PRINT {n_res} | {s_arg} {in_arg} % 8")
                 logging.info(f"PRINT {oct(n_res)} | {oct(in_arg)} % 8")
 
             #B-DIV
@@ -190,7 +196,7 @@ class Contender_class_asi:
                 n_num = self.gln_reg[self.cn_index_register_a]
                 n_den = 2**in_arg
                 n_res = int( n_num / n_den )
-                logging.info(f"B-DIV | B {n_res} = A {n_num} / {n_den}")
+                logging.info(f"B-DIV | B {n_res} = A {n_num} / 2**{s_arg} {n_den}")
                 logging.info(f"B-DIV | B {oct(n_res)} = A {oct(n_num)} / {oct(n_den)}")
                 #write back
                 self.gln_reg[self.cn_index_register_b] = n_res        
@@ -199,7 +205,7 @@ class Contender_class_asi:
                 n_num = self.gln_reg[self.cn_index_register_a]
                 n_den = 2**in_arg
                 n_res = int( n_num / n_den )
-                logging.info(f"C-DIV | C {n_res} = A {n_num} / {n_den}")
+                logging.info(f"C-DIV | C {n_res} = A {n_num} / 2**{s_arg} {n_den}")
                 logging.info(f"C-DIV | C {oct(n_res)} = A {oct(n_num)} / 2^ARG {oct(n_den)}")
                 #write back
                 self.gln_reg[self.cn_index_register_c] = n_res
@@ -347,11 +353,18 @@ if __name__ == "__main__":
     )
     logging.info("Begin")
 
-    logging.info(f"Convert to list: {number_to_list(77772221938660)}")
+    
 
     solution()
 
-
-
-
     #solution2()
+
+
+    #logging.info(f"Convert to list: {number_to_list(77772221938660)}")
+    #n_decimal = 35580059893236
+    #n_octal = oct(n_decimal)
+    #logging.info(f"{n_octal}")
+    ln = number_to_list(1005604065136764)
+    #ln=[3, 5, 5, 8, 0, 0, 5, 9, 8, 9, 3, 2, 3, 6]
+    logging.info(f"eversse List: {ln[::-1]}")
+    
