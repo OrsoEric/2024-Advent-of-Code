@@ -365,7 +365,7 @@ class Labirinth:
 
         return False, n_best_score  #OK
 
-    def find_shortest_path(self, itnn_start : Tuple[int, int], itnn_end : Tuple[int, int] ) -> Tuple[bool, Set[Tuple[int,int]] ]:
+    def find_shortest_path(self, itnn_start : Tuple[int, int], itnn_end : Tuple[int, int], ib_debug = False ) -> Tuple[bool, Set[Tuple[int,int]] ]:
         """
         Find the shortest path from start to end
         """
@@ -382,8 +382,9 @@ class Labirinth:
             logging.error(f"ERROR: could not color forward int map from {itnn_start} to {itnn_end}")
             return True, set() #FAIL
 
-        logging.info(f"Colored forward map | Solution {n_score_forward}")
-        cl_map_forward.show_map()
+        if ib_debug:
+            logging.info(f"Colored forward map | Solution {n_score_forward}")
+            cl_map_forward.show_map()
 
         #do the same from end to beginning. The backward map
         cl_map_backward = Map_of_symbols()
@@ -397,8 +398,9 @@ class Labirinth:
             logging.error(f"ERROR: could not color forward int map from {itnn_start} to {itnn_end}")
             return True, set() #FAIL
 
-        logging.info(f"Colored forward map | Solution {n_score_backward}")
-        cl_map_backward.show_map()
+        if ib_debug:
+            logging.info(f"Colored backward map | Solution {n_score_backward}")
+            cl_map_backward.show_map()
 
         #generate map of path cost
         cl_map_cost = Map_of_symbols()
@@ -440,8 +442,10 @@ class Labirinth:
             logging.error(f"ERROR: No coordinate on best path {dtnn_tiles_in_optimal_path}")
             return True, set() #FAIL
         
+        if ib_debug:
+            cl_map_cost.show_map()
+
         #write back
-        cl_map_cost.show_map()
         self.gcl_map_cost = cl_map_cost
         logging.info(f"SOLUTION | Cost {n_score} | Number of tiles on optimal path: {len(dtnn_tiles_in_optimal_path)}")
         return False, dtnn_tiles_in_optimal_path #OK

@@ -87,9 +87,10 @@ class Day18:
         """
 
         #divide sequence in two.
-        ltnn_initial_walls = self.gcl_map_of_coordinates.gltnn_coordinates[:in_starting_walls]
-        ltnn_later_walls = self.gcl_map_of_coordinates.gltnn_coordinates[in_starting_walls:]
+        ltnn_initial_walls = [ tnn for tnn in self.gcl_map_of_coordinates.gltnn_coordinates[:in_starting_walls] ]
+        ltnn_later_walls = [ tnn for tnn in self.gcl_map_of_coordinates.gltnn_coordinates[in_starting_walls:] ]
 
+        logging.info(f"Wall Coordinates loaded {len(ltnn_initial_walls)}")
         self.gcl_labirinth = Labirinth()
         tnn_size = self.gcl_map_of_coordinates.get_size()
         b_fail = self.gcl_labirinth.set_size( tnn_size )
@@ -109,8 +110,41 @@ class Day18:
         if b_fail:
             logging.error(f"ERROR: could not find shortest path")
             return True #FAIL
+        
+        #for each new wall
+        for n_index, tnn_wall_new in enumerate(ltnn_later_walls):
+            logging.info(f"STEP: {n_index} {in_starting_walls+n_index} | Adding wall {tnn_wall_new}")
+            #add the wall to the map
+            b_fail = self.gcl_labirinth.load_walls_from_list( [tnn_wall_new] )
+            if b_fail:
+                logging.error(f"ERROR: could not load wall {tnn_wall_new}")
+                return True #FAIL
+            #if wall lie on the optimal path
+            if tnn_wall_new in dtnn_shortest_path:
+                #recompute the path
+                b_fail, dtnn_shortest_path_new = self.gcl_labirinth.find_shortest_path( tnn_start, tnn_end )
+                if b_fail:
+                    logging.error(f"ERROR: could not find shortest path")
+                    #not an erro, it just mean I'm done
+                    break
+                #update new shortest path
+                dtnn_shortest_path = dtnn_shortest_path_new
+            #the optimal path is still valid
+            else:
+                pass
 
+        #since I have the shortest path, I printo out the last valid path 
+        cl_map_of_symbol = self.gcl_labirinth.get_map()
+        #mark the optimal path
+        for tnn_optimal in dtnn_shortest_path:
+            cl_map_of_symbol.set_coordinate(tnn_optimal, "X")
+        #mark the position of the last wall
+        cl_map_of_symbol.set_coordinate(tnn_wall_new, "*")
 
+        cl_map_of_symbol.show_map()
+        logging.info(f"STEP {n_index} Total steps:{in_starting_walls+n_index}")
+
+    
     def show_map( self ) -> bool:
         return self.gcl_labirinth.show_map()
 
@@ -146,6 +180,8 @@ def solution() -> bool:
 def solution_part_2() -> bool:
 
     cl_memory_space = Day18()
+
+    cl_memory_space.load_coordinates("day18/day18-data.txt")
 
     cl_memory_space.find_first_wall_that_closes_the_path( 1024 )
 
