@@ -23,3 +23,13 @@ the loading of the first steps of the map was easy
 Now i encapsulate the solution from Day16 into a proper labirinth class
 
 labirinth class operational and loads from list of walls
+
+
+#PART 1
+#solution is 354
+
+#PART2
+#find the coordinate of the first corruption that closes off the path
+#   intuituion
+#I only need to recolor the map if an obstacle falls on the best path
+#I finish the algorithm properly anyway to detect all the tiles in the best path
