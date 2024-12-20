@@ -120,6 +120,30 @@ TODO: ask llama3.2 to improve documentation
 
 
 
+# CLASSES
+
+## Map_of_symbols
+
+very useful to store 2D map of symbols and numbers
+
+Uses:
+- Day 16: base for the labirinth
+- Day 18: base for the labirinth
+
+## Map_of_coordinates
+
+used to store lists of 2D coordinates Y X
+
+## Labirinth
+
+developed first to solve Day 16, made into its own class
+
+uses:
+- Day 16: find solution of labirinths with cost for rotation.
+- Day 18: downgraded to regular cost and tidied up
+
+
+
 
 
 
