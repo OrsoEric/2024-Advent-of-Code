@@ -375,6 +375,225 @@ class Labirinth:
         n_best_score += -self.cn_void -self.cn_price_forward
 
         return False, n_best_score  #OK
+    
+
+    def color_map_of_int_with_cheat(self, icl_map_of_int : Map_of_symbols, itnn_start : Tuple[int, int], itnn_end : Tuple[int, int], itnn_cheat_start : Tuple[int, int], in_cheat_length : int, ib_debug=False ) -> Tuple[bool, int]:
+        """
+        starting from a map with voids and walls
+        starting from a start and end coordinate
+        color a map with the price of reaching the tile
+        
+        The agent is placed in the start
+        Available moves are executed, coloring the tiles with their cost
+        adjacency is 4 connect
+        cost is 1000 for a rotation
+        cost is 1 for moving
+        use a queue
+
+        #advent of code Day 20
+        The token has now a GHOST cooldown
+        If a token is spawned with a ghost cooldown > 0
+        It ignores wall collision during the search
+        and add tokens with a cooldown reduced by one
+        
+
+
+        """
+
+        n_cnt_iterations = 0
+
+        n_best_score = -1
+
+        class Token:
+            """
+            My queue needs to know the orientation going in
+            """
+            gtnn_pos : Tuple[int,int] = (-1,-1)
+            gn_dir : str = '>'
+            gn_score : int = 0
+
+            def __repr__(self):
+                return f"TOKEN | Position: {self.gtnn_pos} | Direction: {self.gn_dir} | Score: {self.gn_score}"
+
+        lst_queue_of_tokens : List[Token] = list()
+
+        @staticmethod
+        def add_best_token_to_queue( ilst_tokens : List[Token], ist_token : Token ):
+            """
+            given a Token
+            I want only the cheapest token in a given coordinate to be present in the queue
+            THERE SHOULD BE ONE IF I USE THIS
+            """
+
+            ln_id_same_position : List[int] = list()
+            #scan the queue
+            for n_index, st_token_in_queue in enumerate(ilst_tokens):
+                if st_token_in_queue.gtnn_pos == ist_token.gtnn_pos:
+                    #list of IDs with the best position
+                    ln_id_same_position.append(n_index)
+
+            n_num_same_position = len(ln_id_same_position)
+            #if unique position
+            if n_num_same_position == 0:
+                #append new token
+                ilst_tokens.append(ist_token)
+            #if duplicate
+            elif n_num_same_position == 1:
+                n_id = ln_id_same_position[0]
+                #if the token in the queue is WORSE than the token I want to push
+                if ilst_tokens[n_id].gn_score > ist_token.gn_score:
+                    #remove the worse token
+                    del ilst_tokens[n_id]
+                    #append new token
+                    ilst_tokens.append(ist_token)
+                #if I want to add a worse token
+                else:
+                    #already optimal
+                    pass
+            else:
+                logging.error(f"ERROR: There is more than one duplicate token in the queue. {ilst_tokens}")
+                return True #FAIL
+
+            return False #OK
+
+        #GOAL SCORE
+        #when I reach the goal, I can safely stop all WRITE operations more expensive then the GOAL
+        n_goal_score = -1
+
+        #build first token
+        st_token = Token()
+        st_token.gtnn_pos = itnn_start
+        st_token.gn_dir = 0
+        st_token.gn_score = self.cn_void +1
+        #push the first token inside the queue
+        lst_queue_of_tokens.append( st_token )
+        
+        #Token processor
+        b_continue = True
+        while b_continue == True:
+            n_stack_size = len(lst_queue_of_tokens)
+            if n_stack_size > self.gn_stack_max:
+                self.gn_stack_max = n_stack_size
+            #queue is empty
+            if n_stack_size <= 0:
+                #exploration is complete
+                b_continue = False
+            else:
+                #get the next token from the front
+                st_token : Token = lst_queue_of_tokens.pop(0)
+                if ib_debug:
+                    logging.debug(f"PROCESSING: {st_token}")
+                #score of the tile being processed
+                n_score_origin = st_token.gn_score
+                tnn_origin = st_token.gtnn_pos
+
+                #initialize list of four connect
+                ltnnn_four_connect_direction = list()
+
+                #IF the goal has been found, and I'm trying to write something more expensive than the goal
+                if n_goal_score != -1 and n_score_origin > n_goal_score:
+                    #STOP in the track
+                    pass
+                else:
+                    #write down the score
+                    icl_map_of_int.set_coordinate(tnn_origin, n_score_origin)
+                    if ib_debug:
+                        logging.debug(f"Tile {tnn_origin} | Color {n_score_origin}") 
+                        icl_map_of_int.show_map()
+
+                    #If I reached the GOAL
+                    if (tnn_origin == itnn_end):
+                        logging.info(f"Agent reached the GOAL with score: {n_score_origin}")
+                        n_goal_score = n_score_origin
+                        n_best_score = n_goal_score
+                        #DO NOT PROPAGATE FURTHER
+                    #I have not reached the goal, keep exploring
+                    else:                        
+                        #get all adjacent tiles
+                        ltnnn_four_connect_direction = icl_map_of_int.get_four_connect_direction( st_token.gtnn_pos )
+
+                #scan all adjacent tiles
+                for tnnn_four_connect_direction in ltnnn_four_connect_direction:
+                    n_y,n_x,n_dir = tnnn_four_connect_direction
+                    tnn_four_connect = (n_y,n_x)
+
+                    b_spawn_new_token = False
+                    #get the content of the four connect coorinate
+                    b_fail, n_score_current = icl_map_of_int.get_coordinate(tnn_four_connect)
+                    if b_fail == True:
+                        logging.error(f"ERROR: cannot read {tnn_four_connect}")
+                        return True #FAIL
+                    
+                    #add 1000 points for each 90° turn
+                    n_turns = self.compute_turns( st_token.gn_dir, n_dir )
+                    #compute color score of the next four connect tile
+                    n_price = self.cn_price_forward + n_turns *self.cn_price_turn
+                    n_score_next = n_score_origin +n_price
+                    if ib_debug:
+                        logging.debug(f"arrival direction: {st_token.gn_dir} | departing direction: {n_dir} | Turns: {n_turns} | Price: {n_price}")
+                    #do not propagate into walls
+                    if n_score_current == self.cn_wall:
+                        #cannot color walls
+                        b_spawn_new_token = False
+                        if ib_debug:
+                            logging.debug(f"Position {tnn_four_connect} Value {n_score_current} | is a WALL")
+                    #if it's the first time the tile is colored
+                    elif n_score_current == self.cn_void:
+                        #I can color in that direction
+                        b_spawn_new_token = True
+                        if ib_debug:
+                            logging.debug(f"Position {tnn_four_connect} Value {n_score_current} | is a VIRGIN: ADD")
+                    #if it's already colored, with a lower number that I'm trying to add
+                    elif n_score_next >= n_score_current:
+                        #there is a cheaper path to get here
+                        b_spawn_new_token = False
+                        if ib_debug:
+                            logging.debug(f"Position {tnn_four_connect} Value {n_score_current} | is a worse than current {n_score_current}")
+                    #I found a cheaper way to get here
+                    else:
+                        #color in that direction
+                        b_spawn_new_token = True
+                        if ib_debug:
+                            logging.debug(f"Position {tnn_four_connect} Value {n_score_current} | is a BETTER than {n_score_next}, ADD")
+
+                    if b_spawn_new_token:
+                        #create a new Token
+                        st_new_token = Token()
+                        #save the coordinate of that tile
+                        st_new_token.gtnn_pos = tnn_four_connect
+                        #save the departing direction
+                        st_new_token.gn_dir = n_dir
+                        #save the score that token will have
+                        st_new_token.gn_score = n_score_next
+                        #do NOT just add the token to the queue
+                        #lst_queue_of_tokens.append(st_new_token)
+                        #I need to look for tokens in the same position, and I only need to keep the cheapest
+                        b_fail = add_best_token_to_queue( lst_queue_of_tokens, st_new_token)
+                        if b_fail:
+                            logging.error("ERROR: Failed to add token to queue")
+                            return True #FAIL
+            #
+            n_cnt_iterations += 1
+            if (self.cn_iteration_debug > 0) and (n_cnt_iterations % self.cn_iteration_debug == 0) or b_continue == False:
+                print(f"iteration: {n_cnt_iterations} stack: {len(lst_queue_of_tokens)} Goal Reached: {n_best_score}")
+        #save iterations
+        self.gn_iterations = n_cnt_iterations
+        #Correct the score to reflect the point system
+        for tnn_cursor in icl_map_of_int:
+            b_fail, n_value = icl_map_of_int.get_coordinate(tnn_cursor)
+            if n_value == self.cn_wall:
+                pass
+            #this is a tile that has never been explored
+            elif n_value == self.cn_void:
+                icl_map_of_int.set_coordinate(tnn_cursor,self.cn_wall)
+            else:
+                n_value = n_value -self.cn_void -self.cn_price_forward
+                icl_map_of_int.set_coordinate(tnn_cursor,n_value)
+
+        #correct the score
+        n_best_score += -self.cn_void -self.cn_price_forward
+
+        return False, n_best_score  #OK
 
     def find_shortest_path(self, ib_debug = False ) -> Tuple[bool, Set[Tuple[int,int]] ]:
         """
