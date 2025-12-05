@@ -1,0 +1,483 @@
+PYTHON GUIDELINES
+### VARIABLES
+- Use descriptive names for variables starting with their type and following with their purpose.
+- Combine words using underscores (`_`) to separate them (snake_case).
+- Avoid single-letter variable names unless they are loop counters (e.g., `i`, `j`).
+**Examples:**
+```python
+n_iteration_counter = 0  # number
+tnn_position = (n_x, n_y)  # tuple of two numbers
+ln_array = list()  # list of numbers
+st_position = Position(3, 5)  # structure
+cl_engine = Engine()  # class
+s_name = "Meaningful"  # name
+x_continue = True #boolean
+```
+### CLASSES
+- Capitalize the first letter of each word in class names and use underscores to separate them. Only the first word is capitalize and none that follows.
+**Example:**
+```python
+class My_custom_class:
+    def __init__(self):
+        self.s_some_variable = str()
+```
+### FUNCTIONS
+- Use descriptive names for functions and take advantage of abstraction layers.
+- Prefix input variables with `i_`.
+**Example:**
+```python
+def my_function(i_name: str) -> Tuple[str, int]:
+    pass
+```
+### COMMENTS
+- Use Doxygen-like docstrings to explain the inputs and outputs of functions and describe the logic used.
+- Write comments to explain the intent of the code. Avoid inline comments.
+**Example:**
+```python
+def my_function(i_name: str) -> Tuple[str, int]:
+    """
+    This function takes a name as input and returns a tuple containing the name and its length.
+    Parameters:
+    i_name (str): The name to process.
+    Returns:
+    Tuple[str, int]: A tuple containing the name and the number of characters in the name.
+    """
+    return (i_name, len(i_name))
+```
+### TYPE HINTS
+- Always use type hinting.
+**Example:**
+```python
+def my_function(i_name: str) -> Tuple[str, int]:
+    pass
+```
+### CONSTANTS
+Use constants with meaningful names, prioritize constants as public class variables with "c" prefix.
+**Example:**
+```python
+N_RESOLUTION = 1024
+class Gravity():
+    cn_gravity=9.81 #Earth gravity in m/s2
+```
+### SHORTHANDS
+- Do not shorthand or use aliases. Use the full module names instead of imports with aliases. You don't use shorthands for tuples, lists and dictionary either.
+**Example:**
+```python
+#no shorthands for imports
+import numpy
+ln_vector = numpy.array()
+#no shorthand for types
+ln_lottery = list()
+tn_position= tuple()
+d_names = dict()
+```
+### Application structure
+Separate the solver from the puzzle loading in two functions
+you are going to have an example for which the answer is known, and an input for which you need to find the answer
+
+--- Day 2: Gift Shop ---
+You get inside and take the elevator to its only other stop: the gift shop. "Thank you for visiting the North Pole!" gleefully exclaims a nearby sign. You aren't sure who is even allowed to visit the North Pole, but you know you can access the lobby through here, and from there you can access the rest of the North Pole base.
+As you make your way through the surprisingly extensive selection, one of the clerks recognizes you and asks for your help.
+As it turns out, one of the younger Elves was playing on a gift shop computer and managed to add a whole bunch of invalid product IDs to their gift shop database! Surely, it would be no trouble for you to identify the invalid product IDs for them, right?
+They've even checked most of the product ID ranges already; they only have a few product ID ranges (your puzzle input) that you'll need to check. For example:
+11-22,95-115,998-1012,1188511880-1188511890,222220-222224,
+1698522-1698528,446443-446449,38593856-38593862,565653-565659,
+824824821-824824827,2121212118-2121212124
+(The ID ranges are wrapped here for legibility; in your input, they appear on a single long line.)
+The ranges are separated by commas (,); each range gives its first ID and last ID separated by a dash (-).
+Since the young Elf was just doing silly patterns, you can find the invalid IDs by looking for any ID which is made only of some sequence of digits repeated twice. So, 55 (5 twice), 6464 (64 twice), and 123123 (123 twice) would all be invalid IDs.
+None of the numbers have leading zeroes; 0101 isn't an ID at all. (101 is a valid ID that you would ignore.)
+Your job is to find all of the invalid IDs that appear in the given ranges. In the above example:
+    11-22 has two invalid IDs, 11 and 22.
+    95-115 has one invalid ID, 99.
+    998-1012 has one invalid ID, 1010.
+    1188511880-1188511890 has one invalid ID, 1188511885.
+    222220-222224 has one invalid ID, 222222.
+    1698522-1698528 contains no invalid IDs.
+    446443-446449 has one invalid ID, 446446.
+    38593856-38593862 has one invalid ID, 38593859.
+    The rest of the ranges contain no invalid IDs.
+Adding up all the invalid IDs in this example produces 1227775554.
+What do you get if you add up all of the invalid IDs?
+
+TASK: make me a python application to solve this problem
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+1:20pm
+
+
+
+
+
+
+
+
+
+
+
+
+Eric, I'll create a Python application that follows your guidelines and solves the problem of identifying invalid product IDs within given ranges. The invalid IDs are those made of a sequence of digits repeated twice (e.g., 11, 123123, etc.).
+Here’s the structure and implementation:
+Application Structure
+
+load_puzzle_input: Loads the input ranges from a file or string.
+is_invalid_id: Checks if an ID is invalid (i.e., made of a repeated sequence of digits).
+solve: Iterates through the ranges, identifies invalid IDs, and sums them up.
+Python Code
+
+
+
+
+from typing import List, Tuple
+
+def load_puzzle_input(i_input: str) -> List[Tuple[int, int]]:
+    """
+    Loads the puzzle input and returns a list of ranges as tuples.
+
+    Parameters:
+    i_input (str): The input string containing the ranges.
+
+    Returns:
+    List[Tuple[int, int]]: A list of tuples, each representing a range.
+    """
+    ln_ranges = []
+    for s_range in i_input.split(','):
+        s_start, s_end = s_range.split('-')
+        ln_ranges.append((int(s_start), int(s_end)))
+    return ln_ranges
+
+def is_invalid_id(i_id: int) -> bool:
+    """
+    Checks if an ID is invalid (i.e., made of a repeated sequence of digits).
+
+    Parameters:
+    i_id (int): The ID to check.
+
+    Returns:
+    bool: True if the ID is invalid, False otherwise.
+    """
+    s_id = str(i_id)
+    n_length = len(s_id)
+    for n_half in range(1, n_length // 2 + 1):
+        if n_length % n_half != 0:
+            continue
+        s_pattern = s_id[:n_half]
+        if s_pattern * (n_length // n_half) == s_id:
+            return True
+    return False
+
+def solve(i_ranges: List[Tuple[int, int]]) -> int:
+    """
+    Solves the problem by iterating through the ranges and summing invalid IDs.
+
+    Parameters:
+    i_ranges (List[Tuple[int, int]]): The list of ranges to check.
+
+    Returns:
+    int: The sum of all invalid IDs.
+    """
+    n_sum = 0
+    for tn_range in i_ranges:
+        n_start, n_end = tn_range
+        for n_id in range(n_start, n_end + 1):
+            if is_invalid_id(n_id):
+                n_sum += n_id
+    return n_sum
+
+# Example usage
+s_example_input = "11-22,95-115,998-1012,1188511880-1188511890,222220-222224,1698522-1698528,446443-446449,38593856-38593862,565653-565659,824824821-824824827,2121212118-2121212124"
+ln_ranges = load_puzzle_input(s_example_input)
+n_result = solve(ln_ranges)
+print(f"The sum of invalid IDs is: {n_result}")
+
+Explanation
+
+load_puzzle_input: Splits the input string into individual ranges and converts them into tuples of integers.
+is_invalid_id: Checks if an ID is invalid by testing if it can be split into equal parts that repeat.
+solve: Iterates through each range, checks each ID, and sums the invalid ones.
+How to Use
+
+Replace s_example_input with your actual puzzle input.
+Run the script. It will print the sum of all invalid IDs.
+Would you like me to adapt this for a specific input file or add any additional features?
+
+
+
+1:20pm
+
+
+
+
+
+the example is in input-part1-example.txt the problem is in input-part1.txt
+
+
+
+
+
+
+
+
+
+1:22pm
+
+
+
+
+
+
+
+
+
+
+
+
+Thank you for clarifying, Eric. I’ll adapt the Python application to read the input from files (input-part1-example.txt for the example and input-part1.txt for the actual problem). Here’s how the updated code will look:
+
+Updated Python Application
+
+
+
+
+from typing import List, Tuple
+
+def load_puzzle_input(i_filename: str) -> List[Tuple[int, int]]:
+    """
+    Loads the puzzle input from a file and returns a list of ranges as tuples.
+
+    Parameters:
+    i_filename (str): The name of the file containing the ranges.
+
+    Returns:
+    List[Tuple[int, int]]: A list of tuples, each representing a range.
+    """
+    with open(i_filename, 'r') as f_file:
+        s_input = f_file.read().strip()
+    ln_ranges = []
+    for s_range in s_input.split(','):
+        s_start, s_end = s_range.split('-')
+        ln_ranges.append((int(s_start), int(s_end)))
+    return ln_ranges
+
+def is_invalid_id(i_id: int) -> bool:
+    """
+    Checks if an ID is invalid (i.e., made of a repeated sequence of digits).
+
+    Parameters:
+    i_id (int): The ID to check.
+
+    Returns:
+    bool: True if the ID is invalid, False otherwise.
+    """
+    s_id = str(i_id)
+    n_length = len(s_id)
+    for n_half in range(1, n_length // 2 + 1):
+        if n_length % n_half != 0:
+            continue
+        s_pattern = s_id[:n_half]
+        if s_pattern * (n_length // n_half) == s_id:
+            return True
+    return False
+
+def solve(i_ranges: List[Tuple[int, int]]) -> int:
+    """
+    Solves the problem by iterating through the ranges and summing invalid IDs.
+
+    Parameters:
+    i_ranges (List[Tuple[int, int]]): The list of ranges to check.
+
+    Returns:
+    int: The sum of all invalid IDs.
+    """
+    n_sum = 0
+    for tn_range in i_ranges:
+        n_start, n_end = tn_range
+        for n_id in range(n_start, n_end + 1):
+            if is_invalid_id(n_id):
+                n_sum += n_id
+    return n_sum
+
+# Example usage
+s_example_filename = "input-part1-example.txt"
+s_problem_filename = "input-part1.txt"
+
+# Solve the example
+ln_example_ranges = load_puzzle_input(s_example_filename)
+n_example_result = solve(ln_example_ranges)
+print(f"The sum of invalid IDs in the example is: {n_example_result}")
+
+# Solve the problem
+ln_problem_ranges = load_puzzle_input(s_problem_filename)
+n_problem_result = solve(ln_problem_ranges)
+print(f"The sum of invalid IDs in the problem is: {n_problem_result}")
+
+
+How to Use
+
+Save your example input in input-part1-example.txt and your problem input in input-part1.txt.
+Run the script. It will read the files, process the ranges, and print the sum of invalid IDs for both the example and the problem.
+Would you like me to run this code with your files, or do you want to test it yourself first? If you want me to run it, please upload the files.
+
+
+
+1:22pm
+
+
+
+
+
+The sum of invalid IDs in the example is: 4174379265
+The sum of invalid IDs in the problem is: 49046150754
+
+the example is wrong, fix it
+
+
+
+
+
+
+
+
+
+1:23pm
+
+
+
+
+
+
+
+
+
+
+
+
+Thank you for pointing out the discrepancy, Eric. The example result should match the expected sum of 1227775554 as described in the problem statement. Let's debug and fix the is_invalid_id function to ensure it correctly identifies invalid IDs.
+Issue Analysis
+The current implementation of is_invalid_id may not be correctly identifying all invalid IDs, especially for cases like 1188511885 (which is 11885 repeated twice).
+Fix
+The function should check if the ID is composed of a sequence of digits repeated exactly twice, not just any number of times. For example:
+
+11 is 1 repeated twice.
+123123 is 123 repeated twice.
+1188511885 is 11885 repeated twice.
+Here’s the corrected version:
+
+
+
+
+def is_invalid_id(i_id: int) -> bool:
+    """
+    Checks if an ID is invalid (i.e., made of a sequence of digits repeated exactly twice).
+
+    Parameters:
+    i_id (int): The ID to check.
+
+    Returns:
+    bool: True if the ID is invalid, False otherwise.
+    """
+    s_id = str(i_id)
+    n_length = len(s_id)
+    if n_length % 2 != 0:
+        return False
+    n_half = n_length // 2
+    return s_id[:n_half] == s_id[n_half:]
+
+Updated Application
+
+from typing import List, Tuple
+
+def load_puzzle_input(i_filename: str) -> List[Tuple[int, int]]:
+    """
+    Loads the puzzle input from a file and returns a list of ranges as tuples.
+
+    Parameters:
+    i_filename (str): The name of the file containing the ranges.
+
+    Returns:
+    List[Tuple[int, int]]: A list of tuples, each representing a range.
+    """
+    with open(i_filename, 'r') as f_file:
+        s_input = f_file.read().strip()
+    ln_ranges = []
+    for s_range in s_input.split(','):
+        s_start, s_end = s_range.split('-')
+        ln_ranges.append((int(s_start), int(s_end)))
+    return ln_ranges
+
+def is_invalid_id(i_id: int) -> bool:
+    """
+    Checks if an ID is invalid (i.e., made of a sequence of digits repeated exactly twice).
+
+    Parameters:
+    i_id (int): The ID to check.
+
+    Returns:
+    bool: True if the ID is invalid, False otherwise.
+    """
+    s_id = str(i_id)
+    n_length = len(s_id)
+    if n_length % 2 != 0:
+        return False
+    n_half = n_length // 2
+    return s_id[:n_half] == s_id[n_half:]
+
+def solve(i_ranges: List[Tuple[int, int]]) -> int:
+    """
+    Solves the problem by iterating through the ranges and summing invalid IDs.
+
+    Parameters:
+    i_ranges (List[Tuple[int, int]]): The list of ranges to check.
+
+    Returns:
+    int: The sum of all invalid IDs.
+    """
+    n_sum = 0
+    for tn_range in i_ranges:
+        n_start, n_end = tn_range
+        for n_id in range(n_start, n_end + 1):
+            if is_invalid_id(n_id):
+                n_sum += n_id
+    return n_sum
+
+# Example usage
+s_example_filename = "input-part1-example.txt"
+s_problem_filename = "input-part1.txt"
+
+# Solve the example
+ln_example_ranges = load_puzzle_input(s_example_filename)
+n_example_result = solve(ln_example_ranges)
+print(f"The sum of invalid IDs in the example is: {n_example_result}")
+
+# Solve the problem
+ln_problem_ranges = load_puzzle_input(s_problem_filename)
+n_problem_result = solve(ln_problem_ranges)
+print(f"The sum of invalid IDs in the problem is: {n_problem_result}")
+
+Explanation of Fix
+
+The is_invalid_id function now only returns True if the ID is composed of a sequence of digits repeated exactly twice.
+This ensures that IDs like 1188511885 are correctly identified as invalid.
+Next Steps
+
+Run the updated code with your example and problem inputs.
+The example should now output 1227775554, matching the problem statement.

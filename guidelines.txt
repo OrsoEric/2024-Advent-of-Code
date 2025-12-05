@@ -1,0 +1,94 @@
+PYTHON GUIDELINES
+
+### VARIABLES
+- Use descriptive names for variables starting with their type and following with their purpose.
+- Combine words using underscores (`_`) to separate them (snake_case).
+- Avoid single-letter variable names unless they are loop counters (e.g., `i`, `j`).
+
+**Examples:**
+```python
+n_iteration_counter = 0  # number
+tnn_position = (n_x, n_y)  # tuple of two numbers
+ln_array = list()  # list of numbers
+st_position = Position(3, 5)  # structure
+cl_engine = Engine()  # class
+s_name = "Meaningful"  # name
+x_continue = True #boolean
+```
+
+### CLASSES
+- Capitalize the first letter of each word in class names and use underscores to separate them. Only the first word is capitalize and none that follows.
+
+**Example:**
+```python
+class My_custom_class:
+    def __init__(self):
+        self.s_some_variable = str()
+```
+
+### FUNCTIONS
+- Use descriptive names for functions and take advantage of abstraction layers.
+- Prefix input variables with `i_`.
+
+**Example:**
+```python
+def my_function(i_name: str) -> Tuple[str, int]:
+    pass
+```
+
+### COMMENTS
+- Use Doxygen-like docstrings to explain the inputs and outputs of functions and describe the logic used.
+- Write comments to explain the intent of the code. Avoid inline comments.
+
+**Example:**
+```python
+def my_function(i_name: str) -> Tuple[str, int]:
+    """
+    This function takes a name as input and returns a tuple containing the name and its length.
+
+    Parameters:
+    i_name (str): The name to process.
+
+    Returns:
+    Tuple[str, int]: A tuple containing the name and the number of characters in the name.
+    """
+    return (i_name, len(i_name))
+```
+
+### TYPE HINTS
+- Always use type hinting.
+
+**Example:**
+```python
+def my_function(i_name: str) -> Tuple[str, int]:
+    pass
+```
+### CONSTANTS
+
+Use constants with meaningful names, prioritize constants as public class variables with "c" prefix.
+**Example:**
+```python
+N_RESOLUTION = 1024
+class Gravity():
+    cn_gravity=9.81 #Earth gravity in m/s2
+```
+
+### SHORTHANDS
+- Do not shorthand or use aliases. Use the full module names instead of imports with aliases. You don't use shorthands for tuples, lists and dictionary either.
+
+**Example:**
+```python
+#no shorthands for imports
+import numpy
+
+ln_vector = numpy.array()
+
+#no shorthand for types
+ln_lottery = list()
+tn_position= tuple()
+d_names = dict()
+```
+
+### Application structure
+Separate the solver from the puzzle loading in two functions
+you are going to have an example for which the answer is known, and an input for which you need to find the answer
