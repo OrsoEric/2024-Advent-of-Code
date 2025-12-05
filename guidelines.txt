@@ -89,6 +89,24 @@ tn_position= tuple()
 d_names = dict()
 ```
 
+### LOGGING AND MAIN
+You are to properly call and save logs
+```
+if __name__ == "__main__":
+    logging.basicConfig(
+        filename="template.log",
+        level=logging.DEBUG,
+        format='[%(asctime)s] %(levelname)s %(module)s:%(lineno)d > %(message)s ',
+        filemode='w'
+    )
+    logging.info("Begin")
+
+    #EXAMPLE
+
+    #INPUT
+```
+
 ### Application structure
 Separate the solver from the puzzle loading in two functions
-you are going to have an example for which the answer is known, and an input for which you need to find the answer
+you are going to have an example in "input-partX-example.txt" which the answer is known
+you are going to have the input in "input-partX.txt" for which you need to find the answer
